@@ -63,13 +63,13 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-		
+
         return view('frontend.user_registration');
     }
 
     protected function validator(array $data)
     {
-        
+
         return Validator::make($data, [
             'on_behalf'            => 'required|integer',
             'first_name'           => ['required', 'string', 'max:255'],
@@ -114,6 +114,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // dd($data['parent_id']);
         $approval = get_setting('member_approval_by_admin') == 1 ? 0 : 1;
         if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $user = User::create([
@@ -126,6 +127,7 @@ class RegisterController extends Controller
                 'password'    => Hash::make($data['password']),
                 'code'        => unique_code(),
                 'approved'    => $approval,
+                'parent_id'   => $data['parent_id'] ?? null
             ]);
         } else {
             if (addon_activation('otp_system')) {
@@ -183,18 +185,19 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
+
         if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
             if (User::where('email', $request->email)->first() != null) {
-                
+
                 return back();
             }
         } elseif (User::where('phone', '+' . $request->country_code . $request->phone)->first() != null) {
             return back()->withInput();
         }
-        
+
         // $this->validator($request->all())->validate();
-        
-        
+
+
          $validator = Validator::make($request->all(), [
         'on_behalf'            => 'required|integer',
         'first_name'           => ['required', 'string', 'max:255'],
@@ -210,14 +213,14 @@ class RegisterController extends Controller
         ],
         'checkbox_example_1'   => ['required', 'string'],
         ]);
-    
+
         if ($validator->fails()) {
-            
+
         $inputData = $request->only(['on_behalf', 'first_name', 'middle_name','last_name','gender', 'date_of_birth', 'phone', 'email', 'password', 'g-recaptcha-response', 'checkbox_example_1']);
-        
+
         return back()->withErrors($validator)->withInput($inputData);
         }
-        
+
         $user = $this->create($request->all());
 
         if (get_setting('member_approval_by_admin') != 1) {
@@ -232,7 +235,7 @@ class RegisterController extends Controller
             $message = translate('A new member has been registered to your system. Name: ') . $user->first_name . ' ' . $user->last_name;
             $route = route('members.index', $user->membership);
 
-            // fcm 
+            // fcm
             if (get_setting('firebase_push_notification') == 1) {
                 $fcmTokens = User::where('user_type', 'admin')->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
                 Larafirebase::withTitle($notify_type)
@@ -264,7 +267,9 @@ class RegisterController extends Controller
                 // dd("3");
             flash(translate('Registration successfull. Please verify your phone number.'))->success();
         }
-
+        if($request->is_registration_by_parent == true){
+            return redirect()->route('parent.dashboard');
+        }
             return view('frontend.register_success');
 //        flash(translate('Registration successfull. Please Wait for admin Aprroval.'))->success();
 //        return redirect()->route('dashboard');

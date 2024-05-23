@@ -69,7 +69,9 @@ class HomeController extends Controller
 
         $new_members = $new_members->orderBy('id', 'desc')->limit(get_setting('max_new_member_show_homepage'))->get()->shuffle();
         $premium_members = $premium_members->where('membership', 2)->inRandomOrder()->limit(get_setting('max_premium_member_homepage'))->get();
-
+        if(Auth::user() && Auth::user()->user_type == 'parent'){
+            return redirect()->route('parent.dashboard');
+        }
 
         return view('frontend.index', compact('premium_members', 'new_members'));
     }
@@ -77,7 +79,11 @@ class HomeController extends Controller
 
     public function admin_login()
     {
-        if (auth()->user() != null && (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff')) {
+        if (auth()->user() != null && (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff' || auth()->user()->user_type == 'parent')) {
+            if(auth()->user()->user_type == 'parent')
+            {
+                return redirect()->route('parent.dashboard');
+            }
             return redirect()->route('admin.dashboard');
         } else {
             return view("auth.login");
@@ -97,7 +103,7 @@ class HomeController extends Controller
     {
         return view('admin.dashboard');
     }
-    
+
     // Manage Admin Profile
     public function admin_profile_update(Request $request, $id)
     {
@@ -152,6 +158,15 @@ class HomeController extends Controller
         }
     }
 
+    public function parentDashboard()
+    {
+        if(Auth::user()->user_type == 'parent'){
+            $childProfiles = User::where('user_type', 'member')->where('parent_id', Auth::user()->id)->get();
+            return view('frontend.parent.dashboard', compact('childProfiles'));
+        } else {
+            abort(404);
+        }
+    }
     public function user_account_blocked()
     {
         return view('frontend.user_account_blocked_msg');
@@ -221,7 +236,7 @@ class HomeController extends Controller
         if (get_setting('member_approval_by_admin') == 1) {
             $users = $users->where('approved', 1);
         }
-       
+
         // Sort By age
         if (!empty($age_from)) {
             $age = $age_from + 1;
@@ -231,7 +246,7 @@ class HomeController extends Controller
                 $users = $users->WhereIn('id', $user_ids);
             }
         }
-        
+
         if (!empty($age_to)) {
             $age = $age_to + 1;
             $end = date('Y-m-d', strtotime("- $age years +1 day"));
@@ -304,7 +319,7 @@ class HomeController extends Controller
                 $users = $users->WhereIn('id', $user_ids);
             }
         }
-       
+
         $users = $users->paginate(10);
         return view('frontend.member.member_listing.index', compact('users', 'age_from', 'age_to', 'member_code', 'matital_status', 'religion_id', 'caste_id', 'sub_caste_id', 'mother_tongue', 'profession', 'country_id', 'state_id', 'city_id', 'min_height', 'max_height', 'member_type'));
     }

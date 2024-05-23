@@ -1,0 +1,2 @@
+ALTER TABLE users
+ADD COLUMN parent_id INT(10) DEFAULT NULL;

@@ -106,7 +106,7 @@ class LoginController extends Controller
                 } else {
                     auth()->login($existingUser, true);
                 }
-                
+
             } else {
 
                 // create a new user
@@ -146,7 +146,7 @@ class LoginController extends Controller
                 }
             }
         }
-        
+
         if (session('link') != null) {
             return redirect(session('link'));
         } else {
@@ -196,7 +196,7 @@ class LoginController extends Controller
             auth()->login($existing_or_new_user, true);
         }
 
-        
+
         if (session('link') != null) {
             return redirect(session('link'));
         } else {
@@ -294,7 +294,7 @@ class LoginController extends Controller
                     }
                 }
             }
-            
+
             $auth_user->member ?  $auth_user->member->delete() : '';
             Address::where('user_id', $auth_user->id)->delete();
             Education::where('user_id', $auth_user->id)->delete();

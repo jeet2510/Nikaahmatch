@@ -186,57 +186,95 @@
                             @endif
                         </a>
                     </div>
-                    <ul
-                        class="mb-0 pl-0 ml-lg-auto d-lg-flex align-items-stretch justify-content-center justify-content-lg-start mobile-hor-swipe">
-                        <li class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['home'], 'bg-primary-grad') }}">
-                            <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
-                                href="{{ route('home') }}">
-                                <span class="text-primary-grad mb-n1">{{ translate('Home') }}</span>
-                            </a>
-                        </li>
-                        <li
-                            class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['member.listing'], 'bg-primary-grad') }}">
-                            <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
-                                href="{{ route('member.listing') }}">
-                                <span class="text-primary-grad mb-n1">{{ translate('Search Match') }}</span>
-                            </a>
-                        </li>
-                        <li
-                            class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['packages'], 'bg-primary-grad') }}">
-                            <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
-                                href="{{ route('packages') }}">
-                                <span class="text-primary-grad mb-n1">{{ translate('Premium Plans') }}</span>
-                            </a>
-                        </li>
-                        <li class="d-inline-block d-lg-flex pb-1">
-                            <a class="btn btn-sm bg-primary-grad fw-700 fs-15 d-flex align-items-center  fw-600 py-1 border"
-                                href="{{ route('register') }}">
-                                <span class="mb-n1 text-white">Registration</span>
-                            </a>
-                        </li>
 
-                        <!-- <li class="d-inline-block d-lg-flex pb-1">-->
-                        <!--    <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"-->
-                        <!--        href="{{ route('register') }}">-->
-                        <!--         <span class="text-primary-grad mb-n1">{{ translate('Registration') }}</span>-->
+                    @if (auth::check() && auth()->user()->user_type == 'parent')
+                        <ul
+                            class="mb-0 pl-0 ml-lg-auto d-lg-flex align-items-stretch justify-content-center justify-content-lg-start mobile-hor-swipe">
 
-                        <!--        </a>-->
-                        <!--</li>-->
-                        <!--<li-->
-                        <!--    class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['happy_stories'], 'bg-primary-grad') }}">-->
-                        <!--    <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"-->
-                        <!--        href="{{ route('happy_stories') }}">-->
-                        <!--        <span class="text-primary-grad mb-n1">{{ translate('Happy Stories') }}</span>-->
-                        <!--    </a>-->
-                        <!--</li>-->
-                        <li
-                            class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['contact_us'], 'bg-primary-grad') }}">
-                            <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
-                                href="{{ route('contact_us') }}">
-                                <span class="text-primary-grad mb-n1">{{ translate('Contact Us') }}</span>
-                            </a>
-                        </li>
-                    </ul>
+                            <li
+                                class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['parent.dashboard'], 'bg-primary-grad') }}">
+                                <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
+                                    href="{{ route('parent.dashboard') }}">
+                                    <span class="text-primary-grad mb-n1">{{ translate('Dashboard') }}</span>
+                                </a>
+                            </li>
+
+                            <li
+                                class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['parent.addchild'], 'bg-primary-grad') }}">
+                                <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
+                                    href="{{ route('parent.addchild') }}">
+                                    <span class="text-primary-grad mb-n1">{{ translate('Add Child') }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    @else
+                        <ul
+                            class="mb-0 pl-0 ml-lg-auto d-lg-flex align-items-stretch justify-content-center justify-content-lg-start mobile-hor-swipe">
+                            <li
+                                class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['home'], 'bg-primary-grad') }}">
+                                <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
+                                    href="{{ route('home') }}">
+                                    <span class="text-primary-grad mb-n1">{{ translate('Home') }}</span>
+                                </a>
+                            </li>
+                            <li
+                                class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['member.listing'], 'bg-primary-grad') }}">
+                                <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
+                                    href="{{ route('member.listing') }}">
+                                    <span class="text-primary-grad mb-n1">{{ translate('Search Match') }}</span>
+                                </a>
+                            </li>
+                            <li
+                                class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['packages'], 'bg-primary-grad') }}">
+                                <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
+                                    href="{{ route('packages') }}">
+                                    <span class="text-primary-grad mb-n1">{{ translate('Premium Plans') }}</span>
+                                </a>
+                            </li>
+                            {{-- <li class="d-inline-block d-lg-flex pb-1">
+                                <a class="btn btn-sm bg-primary-grad fw-700 fs-15 d-flex align-items-center  fw-600 py-1 border"
+                                    href="{{ route('register') }}">
+                                    <span class="mb-n1 text-white">Registration</span>
+                                </a>
+                            </li> --}}
+                            <li class="d-inline-block d-lg-flex pb-1">
+                                <a class="btn btn-sm bg-primary-grad fw-700 fs-15 d-flex align-items-center  fw-600 py-1 border"
+                                    href="{{ route('parent.register') }}">
+                                    <span class="mb-n1 text-white"> Registration</span>
+                                </a>
+                            </li>
+                            <!-- <li class="d-inline-block d-lg-flex pb-1">-->
+                            <!--    <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"-->
+                            <!--        href="{{ route('register') }}">-->
+                            <!--         <span class="text-primary-grad mb-n1">{{ translate('Registration') }}</span>-->
+
+                            <!--        </a>-->
+                            <!--</li>-->
+                            <!--<li-->
+                            <!--    class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['happy_stories'], 'bg-primary-grad') }}">-->
+                            <!--    <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"-->
+                            <!--        href="{{ route('happy_stories') }}">-->
+                            <!--        <span class="text-primary-grad mb-n1">{{ translate('Happy Stories') }}</span>-->
+                            <!--    </a>-->
+                            <!--</li>-->
+                            <li
+                                class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['contact_us'], 'bg-primary-grad') }}">
+                                <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
+                                    href="{{ route('contact_us') }}">
+                                    <span class="text-primary-grad mb-n1">{{ translate('Contact Us') }}</span>
+                                </a>
+                            </li>
+                            @if (session('impersonate_login') == true)
+                                <li
+                                    class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['loginBackAsParent'], 'bg-primary-grad') }}">
+                                    <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
+                                        href="{{ route('loginBackAsParent') }}">
+                                        <span class="text-primary-grad mb-n1">{{ translate('Back As Parent') }}</span>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    @endif
                 </div>
             </div>
         </div>

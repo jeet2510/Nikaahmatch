@@ -17,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 // Contact Us page
 Route::get('/contact-us/page', 'ContactUsController@show_contact_us_page')->name('contact_us');
 Route::post('/contact-us', 'ContactUsController@store')->name('contact-us.store');
+Route::view('/parent/register', 'frontend.parent_registration')->name('parent.register');
+Route::post('/parent/register', 'ParentRegisterController@store')->name('parent.register');
+Route::get('/parent/dashboard', 'HomeController@parentDashboard')->name('parent.dashboard');
+Route::get('/parent/addChild', 'ParentController@addChildPage')->name('parent.addchild');
+Route::post('/parent/addChild', 'ParentController@addChild')->name('parent.addchild');
+Route::get('/loginAschild/{id}', 'ParentController@loginAschild')->name('child.login');
+Route::get('/loginBackAsParent', 'ParentController@loginBackAsParent')->name('loginBackAsParent');
+
 
 //demo
 Route::get('/demo/cron_1', 'DemoController@cron_1');
