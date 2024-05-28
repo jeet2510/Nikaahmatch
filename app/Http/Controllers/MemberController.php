@@ -111,7 +111,7 @@ class MemberController extends Controller
         }
 
         $members = $members->paginate(10);
-        
+
         return view('admin.members.index', compact('members', 'sort_search'));
     }
 
@@ -375,7 +375,7 @@ class MemberController extends Controller
     {
         $sort_search        = null;
         $deleted_members    = User::onlyTrashed()->where('permanently_delete', 0);
-       
+
         if ($request->has('search')) {
             $sort_search  = $request->search;
             $deleted_members  = $deleted_members->where(function ($query) use ($sort_search){
@@ -545,6 +545,11 @@ class MemberController extends Controller
     public function profile_settings()
     {
         $member             = User::findOrFail(Auth::user()->id);
+        // dd($member->member->current_package_id);
+        if($member->member->current_package_id == 1){
+            flash(translate('Please upgrade your plan to process further.'))->error();
+            return redirect()->route('packages');
+        }
         $countries          = Country::where('status', 1)->get();
         $states             = State::all();
         $cities             = City::all();
@@ -674,7 +679,7 @@ class MemberController extends Controller
 			 $id = $member->user_id;
             // User
             $user               = User::findOrFail($id);
-			
+
 			$is_address= Address::where('user_id', $id)->first();
 			$is_physical_attributes = PhysicalAttribute::where('user_id', $id)->first();
 			$is_spiritual_backgrounds= SpiritualBackground::where('user_id', $id)->first();
@@ -693,15 +698,14 @@ class MemberController extends Controller
                 'mothere_tongue' => ['required'],
                 'known_languages' => ['required'],
 
-               
-            ];	
+
+            ];
 			$validator  = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 flash(translate('Sorry! Something went wrong'))->error();
                 return Redirect::back()->withErrors($validator);
             }
 
-            
             $member->introduction = $request->introduction;
             $member->gender             = $request->gender;
             $member->on_behalves_id     = $request->on_behalf;
@@ -712,7 +716,7 @@ class MemberController extends Controller
             $member->known_languages    = $request->known_languages;
             $member->save();
 
-           
+
             $user->first_name   = $request->first_name;
             $user->middle_name   = $request->middle_name;
             $user->last_name    = $request->last_name;
@@ -734,13 +738,13 @@ class MemberController extends Controller
 			else if($section=="saveAddressInfo")
 			{
 				 $rules = [
-               
+
                 'present_country_id'   => ['required'],
                 'present_state_id'     => ['required'],
                 'present_city_id'      => ['required'],
                 'address1' => ['required'],
                 'address2' => ['required'],
-//          
+//
             ];
 $validator  = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
@@ -749,7 +753,7 @@ $validator  = Validator::make($request->all(), $rules);
             }
 				   $address_type = $request->address_type;
 
-            
+
             if ($request->address_type == 'present') {
                 $address = Address::where('user_id', $id)->where('type', $request->address_type)->first();
                 if (empty($address)) {
@@ -795,7 +799,7 @@ $validator  = Validator::make($request->all(), $rules);
                 $address->type             = $request->permanent_address_type;
 				$address->save();
 				}
-                
+
             }
 			if(!empty($is_address) && !empty($is_physical_attributes) && !empty($is_spiritual_backgrounds) && !empty($is_families) && $member->marital_status_id !=null)
 			{
@@ -807,7 +811,7 @@ $validator  = Validator::make($request->all(), $rules);
 			else if($section=="savePhysicalInfo")
 			{
 				 $rules = [
-               
+
                  'height'       => ['required', 'numeric'],
                 'weight'       => ['required', 'numeric'],
                 'eye_color'    => ['required', 'max:50'],
@@ -817,14 +821,14 @@ $validator  = Validator::make($request->all(), $rules);
                 'body_type'    => ['required', 'max:50'],
 //                'body_art'     => ['required', 'max:50'],
 //                'disability'   => ['required', 'max:255'],
-//          
+//
             ];
 $validator  = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 flash(translate('Sorry! Something went wrong'))->error();
                 return Redirect::back()->withErrors($validator);
             }
-				  
+
 				 $physical_attribute = PhysicalAttribute::where('user_id', $id)->first();
             if (empty($physical_attribute)) {
                 $physical_attribute = new PhysicalAttribute;
@@ -841,8 +845,8 @@ $validator  = Validator::make($request->all(), $rules);
             $physical_attribute->body_art      = $request->body_art;
             $physical_attribute->disability    = $request->disability;
 
-            $physical_attribute->save(); 
-				 
+            $physical_attribute->save();
+
 			if(!empty($is_address) && !empty($is_physical_attributes) && !empty($is_spiritual_backgrounds) && !empty($is_families) && $member->marital_status_id !=null)
 			{
 			User::where('id', $user->id)->update(['is_profile_updated' => 1]);
@@ -853,7 +857,7 @@ $validator  = Validator::make($request->all(), $rules);
 				else if($section=="saveSpiritualInfo")
 			{
 				 $rules = [
-               
+
                  'member_religion_id'   => ['required', 'max:255'],
                 'member_caste_id'      => ['required', 'max:255'],
                 'ethnicity'            => ['max:255'],
@@ -861,14 +865,14 @@ $validator  = Validator::make($request->all(), $rules);
                 'community_value'      => ['max:255'],
                 'member_sub_caste_id'   => ['required'],
                 'family_value_id'   => ['required'],
-//          
+//
             ];
 $validator  = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 flash(translate('Sorry! Something went wrong'))->error();
                 return Redirect::back()->withErrors($validator);
             }
-				  
+
 				$spiritual_backgrounds = SpiritualBackground::where('user_id', $id)->first();
             if (empty($spiritual_backgrounds)) {
                 $spiritual_backgrounds          = new SpiritualBackground;
@@ -882,9 +886,10 @@ $validator  = Validator::make($request->all(), $rules);
             $spiritual_backgrounds->personal_value       = $request->personal_value;
             $spiritual_backgrounds->family_value_id       = $request->family_value_id;
             $spiritual_backgrounds->community_value       = $request->community_value;
+            $spiritual_backgrounds->is_strictly_caste_mrg       = $request->is_strictly_caste_mrg;
 
             $spiritual_backgrounds->save();
-				 
+
 			if(!empty($is_address) && !empty($is_physical_attributes) && !empty($is_spiritual_backgrounds) && !empty($is_families) && $member->marital_status_id !=null)
 			{
 			User::where('id', $user->id)->update(['is_profile_updated' => 1]);
@@ -894,9 +899,9 @@ $validator  = Validator::make($request->all(), $rules);
 			}
 			else if($section=="saveFamilyInfo")
 			{
-			
+
             $rules = [
-               
+
 
                 'father'   => ['max:255'],
                 'mother'   => ['max:255'],
@@ -918,7 +923,7 @@ $validator  = Validator::make($request->all(), $rules);
 //               'guardian_name' => ['max:255'],
 //                'guardian_phone' => ['required', 'max:255'],
             ];
- 
+
 
             // Families
             $family = Family::where('user_id', $id)->first();
@@ -948,7 +953,7 @@ $validator  = Validator::make($request->all(), $rules);
             $family->sibling_m_s = json_encode($request->input('sibling_m_s'));
 
             $family->save();
-            	 
+
 			if(!empty($is_address) && !empty($is_physical_attributes) && !empty($is_spiritual_backgrounds) && !empty($is_families) && $member->marital_status_id !=null)
 			{
 			User::where('id',$user->id)->update(['is_profile_updated' => 1]);
@@ -961,7 +966,7 @@ $validator  = Validator::make($request->all(), $rules);
 			{
 				return back();
 			}
-			
+
         } catch (\Exception $e) {
 
             throw $e;

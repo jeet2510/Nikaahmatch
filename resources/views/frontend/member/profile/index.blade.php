@@ -17,7 +17,7 @@
 @section('panel_content')
     <form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST" id="saveCandidateInfo">
         @csrf
-		<input type="hidden" name="section"value="saveCandidateInfo">
+        <input type="hidden" name="section"value="saveCandidateInfo">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-0 h6">{{ translate('Candidate Introduction') }}</h5>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="first_name">{{ translate('Middle Name') }}
-                             
+
                         </label>
                         <input type="text" name="middle_name" value="{{ $member->middle_name }}" class="form-control"
                             placeholder="{{ translate('Middle Name') }}">
@@ -174,54 +174,55 @@
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="children"id="children" value="{{ $member->member->children ?? 0 }}"
-						@if($member->member->marital_status)
-						@if($member->member->marital_status->name=="Never Married") disabled @endif @endif
-                               class="form-control children" placeholder="{{ translate('0') }}" min="0">
+                            @if ($member->member->marital_status) @if ($member->member->marital_status->name == 'Never Married') disabled @endif
+                            @endif
+                        class="form-control children" placeholder="{{ translate('0') }}" min="0">
                     </div>
                 </div>
- @if (get_setting('member_language_section') == 'on')
-	 
-                <div class="card-header">
-                    <h5 class="mb-0 h6">{{ translate('Language') }}</h5>
-                </div>
-                <div class="card-body">
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            <label for="diet">{{ translate('Mother Tongue') }}</label>
-                            <select class="form-control aiz-selectpicker" name="mothere_tongue"
-                                data-selected="{{ $member->member->mothere_tongue }}" data-live-search="true">
-                                <option value="">{{ translate('Select One') }}</option>
-                                @foreach ($languages as $language)
-                                    <option value="{{ $language->id }}"> {{ $language->name }} </option>
-                                @endforeach
-                            </select>
-                            @error('mothere_tongue')
-                                <small class="form-text text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <label for="drink">{{ translate('Known Languages') }}</label>
-                            @php $known_languages = !empty($member->member->known_languages) ? json_decode($member->member->known_languages) : [] ; @endphp
-                            <select class="form-control aiz-selectpicker" name="known_languages[]"
-                                data-live-search="true" multiple>
-                                <option value="">{{ translate('Select') }}</option>
-                                @foreach ($languages as $language)
-                                    <option value="{{ $language->id }}"
-                                        @if (in_array($language->id, $known_languages)) selected @endif>{{ $language->name }} </option>
-                                @endforeach
-                            </select>
-                            @error('known_languages')
-                                <small class="form-text text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
+                @if (get_setting('member_language_section') == 'on')
+
+                    <div class="card-header">
+                        <h5 class="mb-0 h6">{{ translate('Language') }}</h5>
                     </div>
-					 
-                </div>
-				 
-        @endif
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="diet">{{ translate('Mother Tongue') }}</label>
+                                <select class="form-control aiz-selectpicker" name="mothere_tongue"
+                                    data-selected="{{ $member->member->mothere_tongue }}" data-live-search="true">
+                                    <option value="">{{ translate('Select One') }}</option>
+                                    @foreach ($languages as $language)
+                                        <option value="{{ $language->id }}"> {{ $language->name }} </option>
+                                    @endforeach
+                                </select>
+                                @error('mothere_tongue')
+                                    <small class="form-text text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="drink">{{ translate('Known Languages') }}</label>
+                                @php $known_languages = !empty($member->member->known_languages) ? json_decode($member->member->known_languages) : [] ; @endphp
+                                <select class="form-control aiz-selectpicker" name="known_languages[]"
+                                    data-live-search="true" multiple>
+                                    <option value="">{{ translate('Select') }}</option>
+                                    @foreach ($languages as $language)
+                                        <option value="{{ $language->id }}"
+                                            @if (in_array($language->id, $known_languages)) selected @endif>{{ $language->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('known_languages')
+                                    <small class="form-text text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
+
+                    </div>
+
+                @endif
                 <div class="form-group row">
                     <div class="col-md-12">
-                        <label for="photo">{{ translate('Preferred Size 800x800” and “Add Decent Photo Only') }} 
+                        <label for="photo">{{ translate('Preferred Size 800x800” and “Add Decent Photo Only') }}
                             @if (auth()->user()->photo != null && auth()->user()->photo_approved == 0)
                                 <small class="text-danger">({{ translate('Pending for Admin Approval.') }})</small>
                             @elseif(auth()->user()->photo != null && auth()->user()->photo_approved == 1)
@@ -240,150 +241,151 @@
                         </div>
                     </div>
                 </div>
-				 <div class="text-right">
-            <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
+                </div>
+            </div>
+
         </div>
+    </form>
+
+    <!-- Education -->
+    @if (get_setting('member_education_section') == 'on')
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 h6">{{ translate('Education Info') }}</h5>
+                <div class="text-right">
+                    <a onclick="education_add_modal('{{ $member->id }}');" href="javascript:void(0);"
+                        class="btn btn-sm btn-primary ">
+                        <i class="las mr-1 la-plus"></i>
+                        {{ translate('Add New') }}
+                    </a>
+                </div>
             </div>
-			 
+            <div class="card-body">
+                <table class="table aiz-table">
+                    <tr>
+                        <th>{{ translate('Educational Qualifications') }}</th>
+                        <th>{{ translate('Institution') }}</th>
+                        <th data-breakpoints="md">{{ translate('Start') }}</th>
+                        <th data-breakpoints="md">{{ translate('End') }}</th>
+                        <!--<th data-breakpoints="md">{{ translate('Status') }}</th>-->
+                        <th class="text-right">{{ translate('Options') }}</th>
+                    </tr>
+
+                    @php $educations = \App\Models\Education::where('user_id',$member->id)->get(); @endphp
+                    @foreach ($educations as $key => $education)
+                        <tr>
+                            <td>{{ $education->degree }}</td>
+                            <td>{{ $education->institution }}</td>
+                            <td>{{ $education->start }}</td>
+                            <td>{{ $education->end }}</td>
+                            <!--<td>-->
+                            <!--    <label class="aiz-switch aiz-switch-success mb-0">-->
+                            <!--        <input type="checkbox" id="status.{{ $key }}" onchange="update_education_present_status(this)" value="{{ $education->id }}" @if ($education->present == 1) checked @endif data-switch="success"/>-->
+                            <!--        <span></span>-->
+                            <!--    </label>-->
+                            <!--</td>-->
+                            <td class="text-right">
+                                <a href="javascript:void(0);" class="btn btn-soft-info btn-icon btn-circle btn-sm"
+                                    onclick="education_edit_modal('{{ $education->id }}');"
+                                    title="{{ translate('Edit') }}">
+                                    <i class="las la-edit"></i>
+                                </a>
+                                <a href="javascript:void(0);"
+                                    class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
+                                    data-href="{{ route('education.destroy', $education->id) }}"
+                                    title="{{ translate('Delete') }}">
+                                    <i class="las la-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+
         </div>
-		</form>
+    @endif
 
-        <!-- Education -->
-        @if (get_setting('member_education_section') == 'on')
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0 h6">{{ translate('Education Info') }}</h5>
-                    <div class="text-right">
-                        <a onclick="education_add_modal('{{ $member->id }}');" href="javascript:void(0);"
-                            class="btn btn-sm btn-primary ">
-                            <i class="las mr-1 la-plus"></i>
-                            {{ translate('Add New') }}
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <table class="table aiz-table">
-                        <tr>
-                            <th>{{ translate('Educational Qualifications') }}</th>
-                            <th>{{ translate('Institution') }}</th>
-                            <th data-breakpoints="md">{{ translate('Start') }}</th>
-                            <th data-breakpoints="md">{{ translate('End') }}</th>
-                            <!--<th data-breakpoints="md">{{ translate('Status') }}</th>-->
-                            <th class="text-right">{{ translate('Options') }}</th>
-                        </tr>
-
-                        @php $educations = \App\Models\Education::where('user_id',$member->id)->get(); @endphp
-                        @foreach ($educations as $key => $education)
-                            <tr>
-                                <td>{{ $education->degree }}</td>
-                                <td>{{ $education->institution }}</td>
-                                <td>{{ $education->start }}</td>
-                                <td>{{ $education->end }}</td>
-                                <!--<td>-->
-                                <!--    <label class="aiz-switch aiz-switch-success mb-0">-->
-                                <!--        <input type="checkbox" id="status.{{ $key }}" onchange="update_education_present_status(this)" value="{{ $education->id }}" @if ($education->present == 1) checked @endif data-switch="success"/>-->
-                                <!--        <span></span>-->
-                                <!--    </label>-->
-                                <!--</td>-->
-                                <td class="text-right">
-                                    <a href="javascript:void(0);" class="btn btn-soft-info btn-icon btn-circle btn-sm"
-                                        onclick="education_edit_modal('{{ $education->id }}');"
-                                        title="{{ translate('Edit') }}">
-                                        <i class="las la-edit"></i>
-                                    </a>
-                                    <a href="javascript:void(0);"
-                                        class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                        data-href="{{ route('education.destroy', $education->id) }}"
-                                        title="{{ translate('Delete') }}">
-                                        <i class="las la-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </table>
-                </div>
-				
-            </div>
-        @endif
-
-        <!-- Career -->
-        @if (get_setting('member_career_section') == 'on')
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0 h6">{{ translate('Career') }}</h5>
-                    <div class="text-right">
-                        <a onclick="career_add_modal('{{ $member->id }}');" href="javascript:void(0);"
-                            class="btn btn-sm btn-primary ">
-                            <i class="las mr-1 la-plus"></i>
-                            {{ translate('Add New') }}
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <table class="table aiz-table">
-                        <tr>
-                            <th>{{ translate('designation') }}</th>
-                            <th>{{ translate('company') }}</th>
-                            <th data-breakpoints="md">{{ translate('Start') }}</th>
-                            <th data-breakpoints="md">{{ translate('End') }}</th>
-                            <th data-breakpoints="md">{{ translate('Status') }}</th>
-                            <th data-breakpoints="md" class="text-right">{{ translate('Options') }}</th>
-                        </tr>
-
-                        @php $careers = \App\Models\Career::where('user_id',$member->id)->get(); @endphp
-                        @foreach ($careers as $key => $career)
-                            <tr>
-                                <td>{{ $career->designation }}</td>
-                                <td>{{ $career->company }}</td>
-                                <td>{{ $career->start }}</td>
-                                <td>{{ $career->end }}</td>
-                                <td>
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input type="checkbox" id="status.{{ $key }}"
-                                            onchange="update_career_present_status(this)" value="{{ $career->id }}"
-                                            @if ($career->present == 1) checked @endif data-switch="success" />
-                                        <span></span>
-                                    </label>
-                                </td>
-                                <td class="text-right">
-                                    <a href="javascript:void(0);" class="btn btn-soft-info btn-icon btn-circle btn-sm"
-                                        onclick="career_edit_modal('{{ $career->id }}');"
-                                        title="{{ translate('Edit') }}">
-                                        <i class="las la-edit"></i>
-                                    </a>
-                                    <a href="javascript:void(0);"
-                                        class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                        data-href="{{ route('career.destroy', $career->id) }}"
-                                        title="{{ translate('Delete') }}">
-                                        <i class="las la-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-
-                    </table>
-
+    <!-- Career -->
+    @if (get_setting('member_career_section') == 'on')
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 h6">{{ translate('Career') }}</h5>
+                <div class="text-right">
+                    <a onclick="career_add_modal('{{ $member->id }}');" href="javascript:void(0);"
+                        class="btn btn-sm btn-primary ">
+                        <i class="las mr-1 la-plus"></i>
+                        {{ translate('Add New') }}
+                    </a>
                 </div>
             </div>
-        @endif
+            <div class="card-body">
+                <table class="table aiz-table">
+                    <tr>
+                        <th>{{ translate('designation') }}</th>
+                        <th>{{ translate('company') }}</th>
+                        <th data-breakpoints="md">{{ translate('Start') }}</th>
+                        <th data-breakpoints="md">{{ translate('End') }}</th>
+                        <th data-breakpoints="md">{{ translate('Status') }}</th>
+                        <th data-breakpoints="md" class="text-right">{{ translate('Options') }}</th>
+                    </tr>
 
-        <!-- Present Address -->
-        @php
-            $present_address = \App\Models\Address::where('type', 'present')
-                ->where('user_id', $member->id)
-                ->first();
-            $present_country_id = $present_address->country_id ?? '';
-            $present_state_id = $present_address->state_id ?? '';
-            $present_city_id = $present_address->city_id ?? '';
-            $present_postal_code = $present_address->postal_code ?? '';
-            $address1 = $present_address->address1 ?? '';
-            $address2 = $present_address->address2 ?? '';
-        @endphp
-        @if (get_setting('member_present_address_section') == 'on')
-			<form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST" id="saveAddressInfo">
-        @csrf
-          <input type="hidden" name="section"value="saveAddressInfo">
-		  <input type="hidden" name="address_type" value="present">
+                    @php $careers = \App\Models\Career::where('user_id',$member->id)->get(); @endphp
+                    @foreach ($careers as $key => $career)
+                        <tr>
+                            <td>{{ $career->designation }}</td>
+                            <td>{{ $career->company }}</td>
+                            <td>{{ $career->start }}</td>
+                            <td>{{ $career->end }}</td>
+                            <td>
+                                <label class="aiz-switch aiz-switch-success mb-0">
+                                    <input type="checkbox" id="status.{{ $key }}"
+                                        onchange="update_career_present_status(this)" value="{{ $career->id }}"
+                                        @if ($career->present == 1) checked @endif data-switch="success" />
+                                    <span></span>
+                                </label>
+                            </td>
+                            <td class="text-right">
+                                <a href="javascript:void(0);" class="btn btn-soft-info btn-icon btn-circle btn-sm"
+                                    onclick="career_edit_modal('{{ $career->id }}');"
+                                    title="{{ translate('Edit') }}">
+                                    <i class="las la-edit"></i>
+                                </a>
+                                <a href="javascript:void(0);"
+                                    class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
+                                    data-href="{{ route('career.destroy', $career->id) }}"
+                                    title="{{ translate('Delete') }}">
+                                    <i class="las la-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                </table>
+
+            </div>
+        </div>
+    @endif
+
+    <!-- Present Address -->
+    @php
+        $present_address = \App\Models\Address::where('type', 'present')
+            ->where('user_id', $member->id)
+            ->first();
+        $present_country_id = $present_address->country_id ?? '';
+        $present_state_id = $present_address->state_id ?? '';
+        $present_city_id = $present_address->city_id ?? '';
+        $present_postal_code = $present_address->postal_code ?? '';
+        $address1 = $present_address->address1 ?? '';
+        $address2 = $present_address->address2 ?? '';
+    @endphp
+    @if (get_setting('member_present_address_section') == 'on')
+        <form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST"
+            id="saveAddressInfo">
+            @csrf
+            <input type="hidden" name="section"value="saveAddressInfo">
+            <input type="hidden" name="address_type" value="present">
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{ translate('Current Address') }}</h5>
@@ -457,115 +459,117 @@
                     </div>
                 </div>
             </div>
-			
-        @endif
 
-        @php
-            $permanent_address = \App\Models\Address::where('type', 'permanent')
-                ->where('user_id', $member->id)
-                ->first();
-            $permanent_country_id = $permanent_address->country_id ?? '';
-            $permanent_state_id = $permanent_address->state_id ?? '';
-            $permanent_city_id = $permanent_address->city_id ?? '';
-            $permanent_postal_code = $permanent_address->postal_code ?? '';
-            $permanent_address1 = $permanent_address->address1 ?? '';
-            $permanent_address2 = $permanent_address->address2 ?? '';
-        @endphp
-        <!--@if (get_setting('member_permanent_address_section') == 'on')
-    -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0 h6">{{ translate('Permanent Address') }}</h5>
-				<h6 class="mb-0 h6"><input type="checkbox" name="same_as_current" id="same_as_current" value="Yes"> <label>Same as current address</label></h6>
-           <input type="hidden" name="permanent_address_type" value="permanent">
-				   </div>
-			 
-            <div class="card-body permanent_address_section" id="permanent_address_section">
-                
+    @endif
 
-                <div class="form-group row">
-                    <div class="col-md-6">
-                        <label for="permanent_address1">{{ translate('Address 1') }}</label>
-                        <input type="text" name="permanent_address1" value="{{ $permanent_address1 }}"
-                            class="form-control" placeholder="{{ translate('Address 1') }}" >
-                        @error('permanent_address1')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="col-md-6">
-                        <label for="permanent_address2">{{ translate('Address 2') }}</label>
-                        <input type="text" name="permanent_address2" value="{{ $permanent_address2 }}"
-                            class="form-control" placeholder="{{ translate('Address 2') }}" >
-                        @error('permanent_address2')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
+    @php
+        $permanent_address = \App\Models\Address::where('type', 'permanent')
+            ->where('user_id', $member->id)
+            ->first();
+        $permanent_country_id = $permanent_address->country_id ?? '';
+        $permanent_state_id = $permanent_address->state_id ?? '';
+        $permanent_city_id = $permanent_address->city_id ?? '';
+        $permanent_postal_code = $permanent_address->postal_code ?? '';
+        $permanent_address1 = $permanent_address->address1 ?? '';
+        $permanent_address2 = $permanent_address->address2 ?? '';
+    @endphp
+    <!--@if (get_setting('member_permanent_address_section') == 'on')
+                                            -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0 h6">{{ translate('Permanent Address') }}</h5>
+            <h6 class="mb-0 h6"><input type="checkbox" name="same_as_current" id="same_as_current" value="Yes">
+                <label>Same as current address</label>
+            </h6>
+            <input type="hidden" name="permanent_address_type" value="permanent">
+        </div>
+
+        <div class="card-body permanent_address_section" id="permanent_address_section">
+
+
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="permanent_address1">{{ translate('Address 1') }}</label>
+                    <input type="text" name="permanent_address1" value="{{ $permanent_address1 }}"
+                        class="form-control" placeholder="{{ translate('Address 1') }}">
+                    @error('permanent_address1')
+                        <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
-
-                <div class="form-group row">
-                    <div class="col-md-6">
-                        <label for="permanent_country_id">{{ translate('Country') }}</label>
-                        <select class="form-control aiz-selectpicker" name="permanent_country_id"
-                            id="permanent_country_id" data-selected="{{ $permanent_country_id }}"
-                            data-live-search="true" >
-                            <option value="">{{ translate('Select One') }}</option>
-                            @foreach ($countries as $country)
-                                <option value="{{ $country->id }}">{{ $country->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('permanent_country_id')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="col-md-6">
-                        <label for="permanent_state_id">{{ translate('State') }}</label>
-                        <select class="form-control aiz-selectpicker" name="permanent_state_id" id="permanent_state_id"
-                            data-live-search="true" >
-
-                        </select>
-                        @error('permanent_state_id')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
+                <div class="col-md-6">
+                    <label for="permanent_address2">{{ translate('Address 2') }}</label>
+                    <input type="text" name="permanent_address2" value="{{ $permanent_address2 }}"
+                        class="form-control" placeholder="{{ translate('Address 2') }}">
+                    @error('permanent_address2')
+                        <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
-                <div class="form-group row">
-                    <div class="col-md-6">
-                        <label for="permanent_city_id">{{ translate('City') }}</label>
-                        <select class="form-control aiz-selectpicker" name="permanent_city_id" id="permanent_city_id"
-                            data-live-search="true" >
+            </div>
 
-                        </select>
-                        @error('permanent_city_id')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="col-md-6">
-                        <label for="permanent_postal_code">{{ translate('Postal Code') }}</label>
-                        <input type="text" name="permanent_postal_code" value="{{ $permanent_postal_code }}"
-                            class="form-control" placeholder="{{ translate('Postal Code') }}" >
-                        @error('permanent_postal_code')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="permanent_country_id">{{ translate('Country') }}</label>
+                    <select class="form-control aiz-selectpicker" name="permanent_country_id" id="permanent_country_id"
+                        data-selected="{{ $permanent_country_id }}" data-live-search="true">
+                        <option value="">{{ translate('Select One') }}</option>
+                        @foreach ($countries as $country)
+                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('permanent_country_id')
+                        <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
-				 </div>
-				 <div class="text-right">
+                <div class="col-md-6">
+                    <label for="permanent_state_id">{{ translate('State') }}</label>
+                    <select class="form-control aiz-selectpicker" name="permanent_state_id" id="permanent_state_id"
+                        data-live-search="true">
+
+                    </select>
+                    @error('permanent_state_id')
+                        <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="permanent_city_id">{{ translate('City') }}</label>
+                    <select class="form-control aiz-selectpicker" name="permanent_city_id" id="permanent_city_id"
+                        data-live-search="true">
+
+                    </select>
+                    @error('permanent_city_id')
+                        <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="permanent_postal_code">{{ translate('Postal Code') }}</label>
+                    <input type="text" name="permanent_postal_code" value="{{ $permanent_postal_code }}"
+                        class="form-control" placeholder="{{ translate('Postal Code') }}">
+                    @error('permanent_postal_code')
+                        <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
             <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
         </div>
-           
-			
-        </div>
-		</form>
-        <!--
-    @endif-->
+
+
+    </div>
+    </form>
+    <!--
+                                            @endif-->
 
 
 
-        <!-- Physical Attributes -->
-        @if (get_setting('member_physical_attributes_section') == 'on')
-			<form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST" id="savePhysicalInfo">
-        @csrf
-		<input type="hidden" name="section"value="savePhysicalInfo">
+    <!-- Physical Attributes -->
+    @if (get_setting('member_physical_attributes_section') == 'on')
+        <form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST"
+            id="savePhysicalInfo">
+            @csrf
+            <input type="hidden" name="section"value="savePhysicalInfo">
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{ translate('Physical Attributes') }}</h5>
@@ -625,9 +629,10 @@
                         </div>
                         <div class="col-md-6">
                             <label for="blood_group">{{ translate('Blood Group') }}</label>
-							<select class="form-control aiz-selectpicker" name="blood_group"
-                                @if($member->physical_attributes) data-selected="{{ $member->physical_attributes->blood_group }}" @endif data-live-search="true">
-                               
+                            <select class="form-control aiz-selectpicker" name="blood_group"
+                                @if ($member->physical_attributes) data-selected="{{ $member->physical_attributes->blood_group }}" @endif
+                                data-live-search="true">
+
                                 <option value="A"> A </option>
                                 <option value="B"> B </option>
                                 <option value="AB"> AB </option>
@@ -640,9 +645,9 @@
                                 <option value="B+"> B+ </option>
                                 <option value="AB+"> AB+ </option>
                                 <option value="O+"> O+ </option>
-                                
+
                             </select>
-                             
+
                             @error('blood_group')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -659,97 +664,102 @@
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        
+
                     </div>
-                   <div class="text-right">
-            <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
-        </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
+                    </div>
                 </div>
-				
+
             </div>
-			</form>
-        @endif
+        </form>
+    @endif
 
-        <!-- Language -->
-       
+    <!-- Language -->
 
-        <!-- Hobbies  -->
-        @if (get_setting('member_hobbies_and_interests_section') == 'on')
-            <!--@include('frontend.member.profile.hobbies_interest')-->
-        @endif
 
-        <!-- Personal Attitude & Behavior -->
-        @if (get_setting('member_personal_attitude_and_behavior_section') == 'on')
-            <!--@include('frontend.member.profile.attitudes_behavior')-->
-        @endif
+    <!-- Hobbies  -->
+    @if (get_setting('member_hobbies_and_interests_section') == 'on')
+        <!--@include('frontend.member.profile.hobbies_interest')-->
+    @endif
 
-        <!-- Residency Information 
-        @if (get_setting('member_residency_information_section') == 'on')
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0 h6">{{ translate('Residency Information') }}</h5>
-                </div>
-                <div class="card-body">
-                    @php
-                        $birth_country_id = $member->recidency->birth_country_id ?? '';
-                        $recidency_country_id = $member->recidency->recidency_country_id ?? '';
-                        $growup_country_id = $member->recidency->growup_country_id ?? '';
-                    @endphp
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            <label for="birth_country_id">{{ translate('Birth Country') }}</label>
-                            <select class="form-control aiz-selectpicker" name="birth_country_id"
-                                data-selected="{{ $birth_country_id }}" data-live-search="true">
-                                @foreach ($countries as $country)
-                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="recidency_country_id">{{ translate('Residency Country') }}</label>
-                            <select class="form-control aiz-selectpicker" name="recidency_country_id"
-                                data-selected="{{ $recidency_country_id }}" data-live-search="true">
-                                @foreach ($countries as $country)
-                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            <label for="growup_country_id">{{ translate('Grow up Country') }}</label>
-                            <select class="form-control aiz-selectpicker" name="growup_country_id"
-                                data-selected="{{ $growup_country_id }}" data-live-search="true">
-                                @foreach ($countries as $country)
-                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="immigration_status">{{ translate('Immigration Status') }}</label>
-                            <input type="text" name="immigration_status"
-                                value="{{ $member->recidency->immigration_status ?? '' }}"
-                                placeholder="{{ translate('Immigration Status') }}" class="form-control">
-                            @error('immigration_status')
-                                <small class="form-text text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
- 
+    <!-- Personal Attitude & Behavior -->
+    @if (get_setting('member_personal_attitude_and_behavior_section') == 'on')
+        <!--@include('frontend.member.profile.attitudes_behavior')-->
+    @endif
 
-       Spiritual & Social Background -->
-        @php
-            $member_religion_id = $member->spiritual_backgrounds->religion_id ?? '';
-            $member_caste_id = $member->spiritual_backgrounds->caste_id ?? '';
-            $member_sub_caste_id = $member->spiritual_backgrounds->sub_caste_id ?? '';
-        @endphp
-        @if (get_setting('member_spiritual_and_social_background_section') == 'on')
-			<form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST" id="saveSpiritualInfo">
-        @csrf
-		<input type="hidden" name="section"value="saveSpiritualInfo">
+    <!-- Residency Information
+                                                @if (get_setting('member_residency_information_section') == 'on')
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h5 class="mb-0 h6">{{ translate('Residency Information') }}</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            @php
+                                                                $birth_country_id =
+                                                                    $member->recidency->birth_country_id ?? '';
+                                                                $recidency_country_id =
+                                                                    $member->recidency->recidency_country_id ?? '';
+                                                                $growup_country_id =
+                                                                    $member->recidency->growup_country_id ?? '';
+                                                            @endphp
+                                                            <div class="form-group row">
+                                                                <div class="col-md-6">
+                                                                    <label for="birth_country_id">{{ translate('Birth Country') }}</label>
+                                                                    <select class="form-control aiz-selectpicker" name="birth_country_id"
+                                                                        data-selected="{{ $birth_country_id }}" data-live-search="true">
+                                                                        @foreach ($countries as $country)
+    <option value="{{ $country->id }}">{{ $country->name }}</option>
+    @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="recidency_country_id">{{ translate('Residency Country') }}</label>
+                                                                    <select class="form-control aiz-selectpicker" name="recidency_country_id"
+                                                                        data-selected="{{ $recidency_country_id }}" data-live-search="true">
+                                                                        @foreach ($countries as $country)
+    <option value="{{ $country->id }}">{{ $country->name }}</option>
+    @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <div class="col-md-6">
+                                                                    <label for="growup_country_id">{{ translate('Grow up Country') }}</label>
+                                                                    <select class="form-control aiz-selectpicker" name="growup_country_id"
+                                                                        data-selected="{{ $growup_country_id }}" data-live-search="true">
+                                                                        @foreach ($countries as $country)
+    <option value="{{ $country->id }}">{{ $country->name }}</option>
+    @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="immigration_status">{{ translate('Immigration Status') }}</label>
+                                                                    <input type="text" name="immigration_status"
+                                                                        value="{{ $member->recidency->immigration_status ?? '' }}"
+                                                                        placeholder="{{ translate('Immigration Status') }}" class="form-control">
+                                                                    @error('immigration_status')
+        <small class="form-text text-danger">{{ $message }}</small>
+    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+
+                                               Spiritual & Social Background -->
+    @php
+        $member_religion_id = $member->spiritual_backgrounds->religion_id ?? '';
+        $member_caste_id = $member->spiritual_backgrounds->caste_id ?? '';
+        $member_sub_caste_id = $member->spiritual_backgrounds->sub_caste_id ?? '';
+        $is_strictly_caste_mrg = $member->spiritual_backgrounds->is_strictly_caste_mrg ?? 0;
+    @endphp
+    @if (get_setting('member_spiritual_and_social_background_section') == 'on')
+        <form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST"
+            id="saveSpiritualInfo">
+            @csrf
+            <input type="hidden" name="section"value="saveSpiritualInfo">
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{ translate('Spiritual & Social Background') }}</h5>
@@ -801,30 +811,36 @@
                             </select>
                         </div>
                     </div>
-					 <div class="text-right">
-            <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
-        </div>
+                    <div class="col-md-6">
+                        <input type="hidden" name="is_strictly_caste_mrg" value="0">
+                        <input type="checkbox" name="is_strictly_caste_mrg" id="is_strictly_caste_mrg" value="1"
+                            {{ $is_strictly_caste_mrg ? 'checked' : '' }} />
+                        <label for="is_strictly_caste_mrg">{{ translate('Strictly In Caste Marriage') }}</label>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
+                    </div>
                 </div>
-				
+
             </div>
-			</form>
-        @endif
+        </form>
+    @endif
 
-        <!-- Life Style -->
-        @if (get_setting('member_life_style_section') == 'on')
-            <!--@include('frontend.member.profile.lifestyle')-->
-        @endif
+    <!-- Life Style -->
+    @if (get_setting('member_life_style_section') == 'on')
+        <!--@include('frontend.member.profile.lifestyle')-->
+    @endif
 
-        <!-- Astronomic Information  -->
-        @if (get_setting('member_astronomic_information_section') == 'on')
-            <!--@include('frontend.member.profile.astronomic_information')-->
-        @endif
+    <!-- Astronomic Information  -->
+    @if (get_setting('member_astronomic_information_section') == 'on')
+        <!--@include('frontend.member.profile.astronomic_information')-->
+    @endif
 
-        <!-- Family Information -->
-        @if (get_setting('member_family_information_section') == 'on')
-			<form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST" id="saveFamilyInfo">
-        @csrf
-		<input type="hidden" name="section"value="saveFamilyInfo">
+    <!-- Family Information -->
+    @if (get_setting('member_family_information_section') == 'on')
+        <form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST" id="saveFamilyInfo">
+            @csrf
+            <input type="hidden" name="section"value="saveFamilyInfo">
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{ translate('Family Information') }}</h5>
@@ -843,7 +859,7 @@
                         <div class="col-md-6">
                             <label for="father_prof">{{ translate('Father’s Profession') }}</label>
                             <input type="text" name="father_prof" value="{{ $member->families->father_prof ?? '' }}"
-                                placeholder="{{ translate('Father Profession') }}" class="form-control" >
+                                placeholder="{{ translate('Father Profession') }}" class="form-control">
                             @error('father_prof')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -852,7 +868,7 @@
                         <div class="col-md-6 mt-2">
                             <label for="father_educ">{{ translate('Father’s Education') }}</label>
                             <input type="text" name="father_educ" value="{{ $member->families->father_educ ?? '' }}"
-                                placeholder="{{ translate('Father Education') }}" class="form-control" >
+                                placeholder="{{ translate('Father Education') }}" class="form-control">
                             @error('father_educ')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -883,7 +899,7 @@
                         <div class="col-md-6">
                             <label for="father_prof">{{ translate('Mother Profession') }}</label>
                             <input type="text" name="mother_prof" value="{{ $member->families->mother_prof ?? '' }}"
-                                placeholder="{{ translate('Mother Profession') }}" class="form-control" >
+                                placeholder="{{ translate('Mother Profession') }}" class="form-control">
                             @error('mother_prof')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -892,7 +908,7 @@
                         <div class="col-md-6 mt-2">
                             <label for="father_educ">{{ translate('Mother Education') }}</label>
                             <input type="text" name="mother_educ" value="{{ $member->families->mother_educ ?? '' }}"
-                                placeholder="{{ translate('Mother Education') }}" class="form-control" >
+                                placeholder="{{ translate('Mother Education') }}" class="form-control">
                             @error('mother_educ')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -907,37 +923,41 @@
                             @enderror
                         </div>
                     </div>
-<!--
-                    <div class="form-group row">
-                        @php
-                        @endphp
-                        <div class="col-md-6 mt-2">
-                            <label for="guardian_name">{{ translate('Guardian name') }}</label>
-                            <input type="text" name="guardian_name"
-                                value="{{ $member->families->guardian_name ?? '' }}"
-                                placeholder="{{ translate('Guardian Name') }}" class="form-control" required>
-                            @error('guardian_name')
-                                <small class="form-text text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mt-2">
-                            <label for="guardian_phone">{{ translate('Guardian Phone Number') }}</label>
-                            <input type="text" name="guardian_phone"
-                                value="{{ $member->families->guardian_phone ?? '' }}"
-                                placeholder="{{ translate('Guardian Phone Number') }}" class="form-control" required>
-                            @error('guardian_phone')
-                                <small class="form-text text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                    </div>
-					-->
+                    <!--
+                                                            <div class="form-group row">
+                                                                @php
+                                                                @endphp
+                                                                <div class="col-md-6 mt-2">
+                                                                    <label for="guardian_name">{{ translate('Guardian name') }}</label>
+                                                                    <input type="text" name="guardian_name"
+                                                                        value="{{ $member->families->guardian_name ?? '' }}"
+                                                                        placeholder="{{ translate('Guardian Name') }}" class="form-control" required>
+                                                                    @error('guardian_name')
+        <small class="form-text text-danger">{{ $message }}</small>
+    @enderror
+                                                                </div>
+                                                                <div class="col-md-6 mt-2">
+                                                                    <label for="guardian_phone">{{ translate('Guardian Phone Number') }}</label>
+                                                                    <input type="text" name="guardian_phone"
+                                                                        value="{{ $member->families->guardian_phone ?? '' }}"
+                                                                        placeholder="{{ translate('Guardian Phone Number') }}" class="form-control" required>
+                                                                    @error('guardian_phone')
+        <small class="form-text text-danger">{{ $message }}</small>
+    @enderror
+                                                                </div>
+                                                            </div>
+                                             -->
                     @php
                         $index = '0';
                         $siblings = !empty($member->families->sibling) ? json_decode($member->families->sibling) : [];
-                        $maritalStatuses = !empty($member->families->sibling_m_s) ? json_decode($member->families->sibling_m_s) : [];
+                        $maritalStatuses = !empty($member->families->sibling_m_s)
+                            ? json_decode($member->families->sibling_m_s)
+                            : [];
                         $Yon_old = !empty($member->families->Yon_old) ? json_decode($member->families->Yon_old) : [];
                         $relation = !empty($member->families->relation) ? json_decode($member->families->relation) : [];
-                        $sibiling_phone = !empty($member->families->sibiling_phone) ? json_decode($member->families->sibiling_phone) : [];
+                        $sibiling_phone = !empty($member->families->sibiling_phone)
+                            ? json_decode($member->families->sibiling_phone)
+                            : [];
                         //dd($sibiling_phone);
                     @endphp
 
@@ -1007,8 +1027,7 @@
                                     <label for="sibiling_phone">{{ translate('Sibling Phone Number') }}</label>
                                     <input type="text" name="sibiling_phone[]"
                                         value="{{ isset($sibiling_phone[$index]) ? $sibiling_phone[$index] : '' }}"
-                                        class="form-control" placeholder="{{ translate('Sibling Phone Number') }}"
-                                        >
+                                        class="form-control" placeholder="{{ translate('Sibling Phone Number') }}">
                                     @error('sibiling_phone.' . $index)
                                         <small class="form-text text-danger">{{ $message }}</small>
                                     @enderror
@@ -1033,19 +1052,19 @@
                         <div class="col-md-6">
                             <label for="sibling">{{ translate('Grand Father Name (Maternal)') }}</label>
                             <input type="text" name="grand_father"
-                                   value="{{ $member->families->grand_father ?? '' }}" class="form-control"
-                                   placeholder="{{ translate('Grand Father Name (Maternal)') }}" >
+                                value="{{ $member->families->grand_father ?? '' }}" class="form-control"
+                                placeholder="{{ translate('Grand Father Name (Maternal)') }}">
                             @error('grand_father')
-                            <small class="form-text text-danger">{{ $message }}</small>
+                                <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="sibling">{{ translate(' Grand Mother Name (Maternal)') }}</label>
                             <input type="text" name="grand_mother"
-                                   value="{{ $member->families->grand_mother ?? '' }}" class="form-control"
-                                   placeholder="{{ translate('Grand Mother Name (Maternal)') }}" >
+                                value="{{ $member->families->grand_mother ?? '' }}" class="form-control"
+                                placeholder="{{ translate('Grand Mother Name (Maternal)') }}">
                             @error('grand_mother')
-                            <small class="form-text text-danger">{{ $message }}</small>
+                                <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                     </div>
@@ -1054,29 +1073,29 @@
                         <div class="col-md-6">
                             <label for="sibling">{{ translate('Grand Father Name (Paternal)') }}</label>
                             <input type="text" name="nana" value="{{ $member->families->nana ?? '' }}"
-                                   class="form-control" placeholder="{{ translate('Grand Father Name (Paternal)') }}">
+                                class="form-control" placeholder="{{ translate('Grand Father Name (Paternal)') }}">
                             @error('nana')
-                            <small class="form-text text-danger">{{ $message }}</small>
+                                <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <div class="col-md-6">
                             <label for="sibling">{{ translate(' Grand Mother Name (Paternal)') }}</label>
                             <input type="text" name="nani" value="{{ $member->families->nani ?? '' }}"
-                                   class="form-control" placeholder="{{ translate('Grand Mother Name (Paternal)') }}">
+                                class="form-control" placeholder="{{ translate('Grand Mother Name (Paternal)') }}">
                             @error('nani')
-                            <small class="form-text text-danger">{{ $message }}</small>
+                                <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                     </div>
-					<div class="text-right">
-            <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
-        </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
+                    </div>
                 </div>
-				 
+
             </div>
-			</form>
-        @endif
-  
+        </form>
+    @endif
+
 
     <!-- Partner Expectation -->
     @php
@@ -1162,26 +1181,23 @@
         $('#present_country_id').on('change', function() {
             get_states_by_country_for_present_address();
         });
-		$('.marital_status').on('change', function() {
-		
+        $('.marital_status').on('change', function() {
+
             if (this.options[this.selectedIndex].text == 'Never Married') {
-                         document.getElementById("children").disabled = true;
-						 document.getElementById("children").val(0);
-                    }
-					else
-					{
-						 document.getElementById("children").disabled = false;
-					}
+                document.getElementById("children").disabled = true;
+                document.getElementById("children").val(0);
+            } else {
+                document.getElementById("children").disabled = false;
+            }
         });
-		$('#same_as_current').click(function(){
-     
-    if(this.checked == true){
-         document.getElementById("permanent_address_section").style.visibility = 'hidden';
-    }
-    else {
-        document.getElementById("permanent_address_section").style.visibility = 'visible';
-    }
-});
+        $('#same_as_current').click(function() {
+
+            if (this.checked == true) {
+                document.getElementById("permanent_address_section").style.visibility = 'hidden';
+            } else {
+                document.getElementById("permanent_address_section").style.visibility = 'visible';
+            }
+        });
 
         $('#present_state_id').on('change', function() {
             get_cities_by_state_for_present_address();
@@ -1556,7 +1572,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
     <script>
-	 $(function() {
+        $(function() {
             $("#saveCandidateInfo").validate({
                 rules: {
                     'introduction': {
@@ -1566,7 +1582,7 @@
                     'first_name': {
                         required: true
                     },
-                    
+
                     'last_name': {
                         required: true
                     },
@@ -1598,10 +1614,10 @@
                 }
             });
         });
-		 $(function() {
+        $(function() {
             $("#saveAddressInfo").validate({
                 rules: {
-                    
+
                     'present_country_id': {
                         required: true
                     },
@@ -1611,7 +1627,7 @@
                     'present_city_id': {
                         required: true
                     },
-                   
+
                     'address1': {
                         required: true
                     },
@@ -1625,11 +1641,11 @@
                 }
             });
         });
-		 $(function() {
+        $(function() {
             $("#savePhysicalInfo").validate({
                 rules: {
-                   
-                  
+
+
                     'height': {
                         required: true,
                         number: true
@@ -1654,18 +1670,18 @@
                         required: true,
                         maxlength: 50
                     },
-                    
+
                 },
                 submitHandler: function(form) {
                     form.submit();
                 }
             });
         });
-		   $(function() {
+        $(function() {
             $("#saveSpiritualInfo").validate({
                 rules: {
-                     
- 
+
+
 
                     'member_religion_id': {
                         required: true,
@@ -1687,17 +1703,17 @@
                     'member_sub_caste_id': {
                         required: true,
                     },
-                    
+
                 },
                 submitHandler: function(form) {
                     form.submit();
                 }
             });
         });
-		 $(function() {
+        $(function() {
             $("#saveFamilyInfo").validate({
                 rules: {
-                   
+
                     'family_value_id': {
                         required: true,
                     },
@@ -1726,12 +1742,12 @@
                         required: true,
                         maxlength: 255
                     },
-                   
+
                     'guardian_name': {
                         required: true,
                         maxlength: 255
                     },
-                   
+
                 },
                 submitHandler: function(form) {
                     form.submit();
@@ -1748,7 +1764,7 @@
                     'first_name': {
                         required: true
                     },
-                    
+
                     'last_name': {
                         required: true
                     },
@@ -1783,7 +1799,7 @@
                     'present_city_id': {
                         required: true
                     },
-                   
+
                     'address1': {
                         required: true
                     },
@@ -1791,7 +1807,7 @@
                         required: true
                     },
 
-                  
+
                     'height': {
                         required: true,
                         number: true
@@ -1816,8 +1832,8 @@
                         required: true,
                         maxlength: 50
                     },
-                    
-                     
+
+
 
                     'birth_country_id': {
                         required: true
@@ -1888,8 +1904,8 @@
                         required: true,
                         maxlength: 255
                     },
-                   
-                   
+
+
                 },
                 submitHandler: function(form) {
                     form.submit();

@@ -25,7 +25,10 @@
                                         <div class="col-md-auto">
                                             <div class="text-center text-md-left pt-3 pt-md-0">
                                                 @php
-                                                    $avatar_image = $user->member->gender == 1 ? 'assets/img/avatar-place.png' : 'assets/img/female-avatar-place.png';
+                                                    $avatar_image =
+                                                        $user->member->gender == 1
+                                                            ? 'assets/img/avatar-place.png'
+                                                            : 'assets/img/female-avatar-place.png';
                                                     $profile_picture_show = show_profile_picture($user);
                                                 @endphp
                                                 <img @if ($profile_picture_show) src="{{ uploaded_asset($user->photo) }}"
@@ -101,13 +104,31 @@
                                                         <td class="py-1"><span>{{ translate('Location') }}</span></td>
                                                         <td class="py-1 fw-400">
                                                             @php
-                                                                $present_address = \App\Models\Address::where('type', 'present')
+                                                                $present_address = \App\Models\Address::where(
+                                                                    'type',
+                                                                    'present',
+                                                                )
                                                                     ->where('user_id', $user->id)
                                                                     ->first();
                                                             @endphp
                                                             @if (!empty($present_address->country_id))
                                                                 {{ $present_address->country->name }}
                                                             @endif
+                                                        </td>
+                                                        <td class="py-1">
+                                                            <span>{{ translate('Same Caste Marriage') }}</span>
+                                                        </td>
+                                                        <td class="py-1 fw-400">
+
+                                                            @if ($user->spiritual_backgrounds && $user->spiritual_backgrounds->is_strictly_caste_mrg == 1)
+                                                                <span
+                                                                    style="color: rgb(144, 65, 65)"><strong>Yes</strong></span>
+                                                            @else
+                                                                <span
+                                                                    style="color: rgb(68, 157, 71)"><strong>No</strong></span>
+                                                            @endif
+
+
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -125,22 +146,37 @@
                                                     <div class="col">
                                                         @php
                                                             $interest_class = 'text-primary';
-                                                            $do_expressed_interest = \App\Models\ExpressInterest::where('user_id', $user->id)
+                                                            $do_expressed_interest = \App\Models\ExpressInterest::where(
+                                                                'user_id',
+                                                                $user->id,
+                                                            )
                                                                 ->where('interested_by', Auth::user()->id)
                                                                 ->first();
-                                                            $received_expressed_interest = \App\Models\ExpressInterest::where('user_id', Auth::user()->id)
+                                                            $received_expressed_interest = \App\Models\ExpressInterest::where(
+                                                                'user_id',
+                                                                Auth::user()->id,
+                                                            )
                                                                 ->where('interested_by', $user->id)
                                                                 ->first();
-                                                            if (empty($do_expressed_interest) && empty($received_expressed_interest)) {
+                                                            if (
+                                                                empty($do_expressed_interest) &&
+                                                                empty($received_expressed_interest)
+                                                            ) {
                                                                 $interest_onclick = 1;
                                                                 $interest_text = translate('Send Interest Request');
                                                                 $interest_class = 'text-dark';
                                                             } elseif (!empty($received_expressed_interest)) {
                                                                 $interest_onclick = 'do_response';
-                                                                $interest_text = $received_expressed_interest->status == 0 ? translate('Response to Interest') : translate('You Accepted Interest');
+                                                                $interest_text =
+                                                                    $received_expressed_interest->status == 0
+                                                                        ? translate('Response to Interest')
+                                                                        : translate('You Accepted Interest');
                                                             } else {
                                                                 $interest_onclick = 0;
-                                                                $interest_text = $do_expressed_interest->status == 0 ? translate('Interest Expressed') : translate('Interest Accepted');
+                                                                $interest_text =
+                                                                    $do_expressed_interest->status == 0
+                                                                        ? translate('Interest Expressed')
+                                                                        : translate('Interest Accepted');
                                                             }
                                                         @endphp
 
@@ -158,7 +194,10 @@
                                                     </div>
                                                     <div class="col">
                                                         @php
-                                                            $shortlist = \App\Models\Shortlist::where('user_id', $user->id)
+                                                            $shortlist = \App\Models\Shortlist::where(
+                                                                'user_id',
+                                                                $user->id,
+                                                            )
                                                                 ->where('shortlisted_by', Auth::user()->id)
                                                                 ->first();
                                                             if (empty($shortlist)) {
@@ -195,7 +234,10 @@
                                                     </div>
                                                     <div class="col">
                                                         @php
-                                                            $profile_reported = \App\Models\ReportedUser::where('user_id', $user->id)
+                                                            $profile_reported = \App\Models\ReportedUser::where(
+                                                                'user_id',
+                                                                $user->id,
+                                                            )
                                                                 ->where('reported_by', Auth::user()->id)
                                                                 ->first();
                                                             if (empty($profile_reported)) {
@@ -435,7 +477,7 @@
 
         // Express Interest
         var package_validity = false;
-        @if(package_validity(Auth::user()->id))
+        @if (package_validity(Auth::user()->id))
             package_validity = true;
         @endif
 
