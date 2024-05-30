@@ -105,10 +105,17 @@
                         <label for="first_name">{{ translate('Date Of Birth') }}
                             <span class="text-danger">*</span>
                         </label>
-                        <input type="text" class="aiz-date-range form-control" name="date_of_birth"
-                            value="@if (!empty($member->member->birthday)) {{ date('d-m-Y', strtotime($member->member->birthday)) }} @endif"
-                            placeholder="Select Date" data-format="DD-MM-YYYY" data-single="true" data-show-dropdown="true"
-                            data-max-date="{{ get_max_date() }}" autocomplete="off" required>
+                        @php
+                            $maxYear = date('Y') - 18;
+                        @endphp
+                        <select class="form-control" name="date_of_birth" id="date_of_birth" required>
+                            <option value="">{{ translate('Select Year') }}</option>
+                            @for ($year = $maxYear; $year >= 1970; $year--)
+                                <option value="{{ $year }}" @if (!empty($member->member->birthday) && date('Y', strtotime($member->member->birthday)) == $year) selected @endif>
+                                    {{ $year }}</option>
+                            @endfor
+                        </select>
+
                         @error('date_of_birth')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -187,7 +194,7 @@
                     <div class="card-body">
                         <div class="form-group row">
                             <div class="col-md-6">
-                                <label for="diet">{{ translate('Mother Tongue') }}</label>
+                                <label for="diet">Mother Tongue</label>
                                 <select class="form-control aiz-selectpicker" name="mothere_tongue"
                                     data-selected="{{ $member->member->mothere_tongue }}" data-live-search="true">
                                     <option value="">{{ translate('Select One') }}</option>
@@ -222,7 +229,7 @@
                 @endif
                 <div class="form-group row">
                     <div class="col-md-12">
-                        <label for="photo">{{ translate('Preferred Size 800x800” and “Add Decent Photo Only') }}
+                        <label for="photo">Preferred Size 800x800 And Add Decent Photo Only
                             @if (auth()->user()->photo != null && auth()->user()->photo_approved == 0)
                                 <small class="text-danger">({{ translate('Pending for Admin Approval.') }})</small>
                             @elseif(auth()->user()->photo != null && auth()->user()->photo_approved == 1)
@@ -474,7 +481,7 @@
         $permanent_address2 = $permanent_address->address2 ?? '';
     @endphp
     <!--@if (get_setting('member_permanent_address_section') == 'on')
-                                            -->
+                                                                                                                                                    -->
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0 h6">{{ translate('Permanent Address') }}</h5>
@@ -560,7 +567,7 @@
     </div>
     </form>
     <!--
-                                            @endif-->
+                                                                                                                                                    @endif-->
 
 
 
@@ -620,9 +627,25 @@
                     <div class="form-group row">
                         <div class="col-md-6">
                             <label for="complexion">{{ translate('Complexion') }}</label>
-                            <input type="text" name="complexion"
-                                value="{{ $member->physical_attributes->complexion ?? '' }}" class="form-control"
-                                placeholder="{{ translate('Complexion') }}" required>
+                            <select name="complexion" class="form-control" required>
+                                <option value="">{{ translate('Select Complexion') }}</option>
+                                <option value="very_fair"
+                                    {{ isset($member->physical_attributes) && $member->physical_attributes->complexion == 'very_fair' ? 'selected' : '' }}>
+                                    {{ translate('Very Fair') }}
+                                </option>
+                                <option value="fair"
+                                    {{ isset($member->physical_attributes) && $member->physical_attributes->complexion == 'fair' ? 'selected' : '' }}>
+                                    {{ translate('Fair') }}
+                                </option>
+                                <option value="wheatish"
+                                    {{ isset($member->physical_attributes) && $member->physical_attributes->complexion == 'wheatish' ? 'selected' : '' }}>
+                                    {{ translate('Wheatish') }}
+                                </option>
+                                <option value="other"
+                                    {{ isset($member->physical_attributes) && $member->physical_attributes->complexion == 'other' ? 'selected' : '' }}>
+                                    {{ translate('Other') }}
+                                </option>
+                            </select>
                             @error('complexion')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -689,66 +712,75 @@
     @endif
 
     <!-- Residency Information
-                                                @if (get_setting('member_residency_information_section') == 'on')
-                                                    <div class="card">
-                                                        <div class="card-header">
-                                                            <h5 class="mb-0 h6">{{ translate('Residency Information') }}</h5>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            @php
-                                                                $birth_country_id =
-                                                                    $member->recidency->birth_country_id ?? '';
-                                                                $recidency_country_id =
-                                                                    $member->recidency->recidency_country_id ?? '';
-                                                                $growup_country_id =
-                                                                    $member->recidency->growup_country_id ?? '';
-                                                            @endphp
-                                                            <div class="form-group row">
-                                                                <div class="col-md-6">
-                                                                    <label for="birth_country_id">{{ translate('Birth Country') }}</label>
-                                                                    <select class="form-control aiz-selectpicker" name="birth_country_id"
-                                                                        data-selected="{{ $birth_country_id }}" data-live-search="true">
-                                                                        @foreach ($countries as $country)
+                                                                                                                                                        @if (get_setting('member_residency_information_section') == 'on')
+                                                                                                                                                            <div class="card">
+                                                                                                                                                                <div class="card-header">
+                                                                                                                                                                    <h5 class="mb-0 h6">{{ translate('Residency Information') }}</h5>
+                                                                                                                                                                </div>
+                                                                                                                                                                <div class="card-body">
+                                                                                                                                                                    @php
+                                                                                                                                                                        $birth_country_id =
+                                                                                                                                                                            $member
+                                                                                                                                                                                ->recidency
+                                                                                                                                                                                ->birth_country_id ??
+                                                                                                                                                                            '';
+                                                                                                                                                                        $recidency_country_id =
+                                                                                                                                                                            $member
+                                                                                                                                                                                ->recidency
+                                                                                                                                                                                ->recidency_country_id ??
+                                                                                                                                                                            '';
+                                                                                                                                                                        $growup_country_id =
+                                                                                                                                                                            $member
+                                                                                                                                                                                ->recidency
+                                                                                                                                                                                ->growup_country_id ??
+                                                                                                                                                                            '';
+                                                                                                                                                                    @endphp
+                                                                                                                                                                    <div class="form-group row">
+                                                                                                                                                                        <div class="col-md-6">
+                                                                                                                                                                            <label for="birth_country_id">{{ translate('Birth Country') }}</label>
+                                                                                                                                                                            <select class="form-control aiz-selectpicker" name="birth_country_id"
+                                                                                                                                                                                data-selected="{{ $birth_country_id }}" data-live-search="true">
+                                                                                                                                                                                @foreach ($countries as $country)
     <option value="{{ $country->id }}">{{ $country->name }}</option>
     @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label for="recidency_country_id">{{ translate('Residency Country') }}</label>
-                                                                    <select class="form-control aiz-selectpicker" name="recidency_country_id"
-                                                                        data-selected="{{ $recidency_country_id }}" data-live-search="true">
-                                                                        @foreach ($countries as $country)
+                                                                                                                                                                            </select>
+                                                                                                                                                                        </div>
+                                                                                                                                                                        <div class="col-md-6">
+                                                                                                                                                                            <label for="recidency_country_id">{{ translate('Residency Country') }}</label>
+                                                                                                                                                                            <select class="form-control aiz-selectpicker" name="recidency_country_id"
+                                                                                                                                                                                data-selected="{{ $recidency_country_id }}" data-live-search="true">
+                                                                                                                                                                                @foreach ($countries as $country)
     <option value="{{ $country->id }}">{{ $country->name }}</option>
     @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <div class="col-md-6">
-                                                                    <label for="growup_country_id">{{ translate('Grow up Country') }}</label>
-                                                                    <select class="form-control aiz-selectpicker" name="growup_country_id"
-                                                                        data-selected="{{ $growup_country_id }}" data-live-search="true">
-                                                                        @foreach ($countries as $country)
+                                                                                                                                                                            </select>
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </div>
+                                                                                                                                                                    <div class="form-group row">
+                                                                                                                                                                        <div class="col-md-6">
+                                                                                                                                                                            <label for="growup_country_id">{{ translate('Grow up Country') }}</label>
+                                                                                                                                                                            <select class="form-control aiz-selectpicker" name="growup_country_id"
+                                                                                                                                                                                data-selected="{{ $growup_country_id }}" data-live-search="true">
+                                                                                                                                                                                @foreach ($countries as $country)
     <option value="{{ $country->id }}">{{ $country->name }}</option>
     @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label for="immigration_status">{{ translate('Immigration Status') }}</label>
-                                                                    <input type="text" name="immigration_status"
-                                                                        value="{{ $member->recidency->immigration_status ?? '' }}"
-                                                                        placeholder="{{ translate('Immigration Status') }}" class="form-control">
-                                                                    @error('immigration_status')
+                                                                                                                                                                            </select>
+                                                                                                                                                                        </div>
+                                                                                                                                                                        <div class="col-md-6">
+                                                                                                                                                                            <label for="immigration_status">{{ translate('Immigration Status') }}</label>
+                                                                                                                                                                            <input type="text" name="immigration_status"
+                                                                                                                                                                                value="{{ $member->recidency->immigration_status ?? '' }}"
+                                                                                                                                                                                placeholder="{{ translate('Immigration Status') }}" class="form-control">
+                                                                                                                                                                            @error('immigration_status')
         <small class="form-text text-danger">{{ $message }}</small>
     @enderror
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </div>
+                                                                                                                                                                </div>
+                                                                                                                                                            </div>
+                                                                                                                                                        @endif
 
 
-                                               Spiritual & Social Background -->
+                                                                                                                                                       Spiritual & Social Background -->
     @php
         $member_religion_id = $member->spiritual_backgrounds->religion_id ?? '';
         $member_caste_id = $member->spiritual_backgrounds->caste_id ?? '';
@@ -781,23 +813,26 @@
                             @enderror
                         </div>
                         <div class="col-md-6">
-                            <label for="member_caste_id">{{ translate('Caste') }}</label>
-                            <select class="form-control aiz-selectpicker" name="member_caste_id" id="member_caste_id"
-                                data-live-search="true" required>
-
+                            <label for="member_caste_id">{{ translate('Select Caste') }}</label>
+                            <select class="form-control" name="member_caste_id" id="member_caste_id" required>
+                                <option value="">{{ translate('Select Caste') }}</option>
+                                <!-- Other options will be populated dynamically -->
+                                <option value="other">{{ translate('Other') }}</option>
                             </select>
+
+
                             @error('member_caste_id')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-6">
-                            <label for="member_sub_caste_id">{{ translate('Sub Caste') }}</label>
-                            <select class="form-control aiz-selectpicker" name="member_sub_caste_id"
-                                id="member_sub_caste_id" data-live-search="true">
-
-                            </select>
+                        <div class="col-md-6" id="other_caste_div" style="display:none">
+                            <label for="member_caste_other" id="other_caste_label"
+                                style="display: none;">{{ translate('Enter Your Caste') }}</label>
+                            <input type="text" class="form-control mt-2" name="member_caste_other"
+                                id="member_caste_other" placeholder="{{ translate('Enter Other Caste') }}"
+                                style="display:none;">
                         </div>
                         <div class="col-md-6">
                             <label for="family_value_id">{{ translate('Family Value') }}</label>
@@ -812,11 +847,12 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <input type="hidden" name="is_strictly_caste_mrg" value="0">
-                        <input type="checkbox" name="is_strictly_caste_mrg" id="is_strictly_caste_mrg" value="1"
-                            {{ $is_strictly_caste_mrg ? 'checked' : '' }} />
-                        <label for="is_strictly_caste_mrg">{{ translate('Strictly In Caste Marriage') }}</label>
+                        <input type="hidden" name="is_strictly_caste_mrg" value="1">
+                        <input type="checkbox" name="is_strictly_caste_mrg" id="is_strictly_caste_mrg" value="0"
+                            {{ !$is_strictly_caste_mrg ? 'checked' : '' }} />
+                        <label for="is_strictly_caste_mrg">{{ translate('Cast No Bar') }}</label>
                     </div>
+
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
                     </div>
@@ -924,29 +960,29 @@
                         </div>
                     </div>
                     <!--
-                                                            <div class="form-group row">
-                                                                @php
-                                                                @endphp
-                                                                <div class="col-md-6 mt-2">
-                                                                    <label for="guardian_name">{{ translate('Guardian name') }}</label>
-                                                                    <input type="text" name="guardian_name"
-                                                                        value="{{ $member->families->guardian_name ?? '' }}"
-                                                                        placeholder="{{ translate('Guardian Name') }}" class="form-control" required>
-                                                                    @error('guardian_name')
+                                                                                                                                                                    <div class="form-group row">
+                                                                                                                                                                        @php
+                                                                                                                                                                        @endphp
+                                                                                                                                                                        <div class="col-md-6 mt-2">
+                                                                                                                                                                            <label for="guardian_name">{{ translate('Guardian name') }}</label>
+                                                                                                                                                                            <input type="text" name="guardian_name"
+                                                                                                                                                                                value="{{ $member->families->guardian_name ?? '' }}"
+                                                                                                                                                                                placeholder="{{ translate('Guardian Name') }}" class="form-control" required>
+                                                                                                                                                                            @error('guardian_name')
         <small class="form-text text-danger">{{ $message }}</small>
     @enderror
-                                                                </div>
-                                                                <div class="col-md-6 mt-2">
-                                                                    <label for="guardian_phone">{{ translate('Guardian Phone Number') }}</label>
-                                                                    <input type="text" name="guardian_phone"
-                                                                        value="{{ $member->families->guardian_phone ?? '' }}"
-                                                                        placeholder="{{ translate('Guardian Phone Number') }}" class="form-control" required>
-                                                                    @error('guardian_phone')
+                                                                                                                                                                        </div>
+                                                                                                                                                                        <div class="col-md-6 mt-2">
+                                                                                                                                                                            <label for="guardian_phone">{{ translate('Guardian Phone Number') }}</label>
+                                                                                                                                                                            <input type="text" name="guardian_phone"
+                                                                                                                                                                                value="{{ $member->families->guardian_phone ?? '' }}"
+                                                                                                                                                                                placeholder="{{ translate('Guardian Phone Number') }}" class="form-control" required>
+                                                                                                                                                                            @error('guardian_phone')
         <small class="form-text text-danger">{{ $message }}</small>
     @enderror
-                                                                </div>
-                                                            </div>
-                                             -->
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </div>
+                                                                                                                                                     -->
                     @php
                         $index = '0';
                         $siblings = !empty($member->families->sibling) ? json_decode($member->families->sibling) : [];
@@ -1311,34 +1347,53 @@
             get_castes_by_religion_for_member();
         });
 
-        $('#member_caste_id').on('change', function() {
-            get_sub_castes_by_caste_for_member();
-        });
+        // $('#member_caste_id').on('change', function() {
+        //     get_sub_castes_by_caste_for_member();
+        // });
 
         // get castes and subcastes For partner
-        function get_castes_by_religion_for_partner() {
-            var partner_religion_id = $('#partner_religion_id').val();
+        function get_castes_by_religion_for_member() {
+            var member_religion_id = $('#member_religion_id').val();
             $.post('{{ route('castes.get_caste_by_religion') }}', {
                 _token: '{{ csrf_token() }}',
-                religion_id: partner_religion_id
+                religion_id: member_religion_id
             }, function(data) {
-                $('#partner_caste_id').html(null);
+                $('#member_caste_id').html(
+                    '<option value="">{{ translate('Select Caste') }}</option>'); // Add default option
                 for (var i = 0; i < data.length; i++) {
-                    $('#partner_caste_id').append($('<option>', {
+                    $('#member_caste_id').append($('<option>', {
                         value: data[i].id,
                         text: data[i].name
                     }));
                 }
-                $("#partner_caste_id > option").each(function() {
-                    if (this.value == '{{ $partner_caste_id }}') {
-                        $("#partner_caste_id").val(this.value).change();
+                // Add the "Other" option
+                $('#member_caste_id').append($('<option>', {
+                    value: 'other',
+                    text: '{{ translate('Other') }}'
+                }));
+
+                $("#member_caste_id > option").each(function() {
+                    if (this.value == '{{ $member_caste_id }}') {
+                        $("#member_caste_id").val(this.value).change();
                     }
                 });
                 AIZ.plugins.bootstrapSelect('refresh');
 
-                get_sub_castes_by_caste_for_partner();
+                get_sub_castes_by_caste_for_member();
             });
         }
+        $(document).on('change', '#member_caste_id', function() {
+            if ($(this).val() === 'other') {
+                $('#member_caste_other').show();
+                $('#other_caste_div').show();
+                $('#other_caste_label').show();
+
+            } else {
+                $('#member_caste_other').hide();
+                $('#other_caste_label').hide();
+                $('#other_caste_div').hide();
+            }
+        });
 
         function get_sub_castes_by_caste_for_partner() {
             var partner_caste_id = $('#partner_caste_id').val();

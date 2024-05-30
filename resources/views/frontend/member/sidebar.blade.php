@@ -15,11 +15,12 @@
                 @endif
             </span>
             @php
-            $user = auth()->user();
-            $genderText = (optional($user->member)->gender == 1) ? 'M' : ((optional($user->member)->gender == 2) ? 'F' : 'T');
+                $user = auth()->user();
+                $genderText =
+                    optional($user->member)->gender == 1 ? 'M' : (optional($user->member)->gender == 2 ? 'F' : 'T');
             @endphp
-            <h4 class="h5 fw-600">{{ Auth::user()->first_name . ' ' . Auth::user()->last_name  }}</h4>
-            <span> Profile Id :- {{$genderText}} {{ Auth::user()->id }}</span>
+            <h4 class="h5 fw-600">{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</h4>
+            <span> Profile Id :- {{ $genderText }} {{ Auth::user()->code }}</span>
         </div>
         <div class="text-center mb-3 px-3">
             <a href="{{ route('member_profile', Auth::user()->id) }}"

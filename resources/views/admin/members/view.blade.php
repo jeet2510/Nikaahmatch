@@ -31,6 +31,13 @@
                             <a href="javascript:void(0);" onclick="unblock_member({{ $member->id }})"
                                 class="btn btn-dark btn-sm add-tooltip">{{ translate('Unblock') }}</i></a>
                         @endif
+                        @can('approve_member')
+                            @if ($member->approved == 0)
+                                <a class="btn btn-success mt-2 btn-sm add-tooltip"
+                                    onclick="approve_member({{ $member->id }})"
+                                    href="javascript:void(0);">{{ translate('Approve') }}</a>
+                            @endif
+                        @endcan
                         <br><br>
                         @if ($member->deactivated == 0)
                             <span class="badge badge-inline badge-success">{{ translate('Active Account') }}</span>
@@ -92,7 +99,7 @@
                             <td>{{ $member->phone }}</td>
                         </tr>
                         <tr>
-                            <th>{{ translate('Marital Status') }}</th>
+                            <th>Marital Status</th>
                             <td>{{ $member->member->marital_status->name ?? '' }}</td>
 
                             <th>{{ translate('Number Of Children') }}</th>
@@ -350,76 +357,76 @@
             <!-- Hobbies  -->
             @if (get_setting('member_hobbies_and_interests_section') == 'on')
                 <!--<div class="card">
-                      <div class="card-header bg-dark text-white">
-                          <h5 class="mb-0 h6">{{ translate('Hobbies & Interest') }}</h5>
-                      </div>
-                      <div class="card-body">
-                          <table class="table">
-                    <tr>
-                    <th>{{ translate('Hobbies') }}</th>
-                                      <td>{{ $member->hobbies->hobbies ?? '' }}</td>
+                                                                                                          <div class="card-header bg-dark text-white">
+                                                                                                              <h5 class="mb-0 h6">{{ translate('Hobbies & Interest') }}</h5>
+                                                                                                          </div>
+                                                                                                          <div class="card-body">
+                                                                                                              <table class="table">
+                                                                                                        <tr>
+                                                                                                        <th>{{ translate('Hobbies') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->hobbies ?? '' }}</td>
 
-                    <th>{{ translate('Interests') }}</th>
-                                      <td>{{ $member->hobbies->interests ?? '' }}</td>
-                    </tr>
-                                  <tr>
-                    <th>{{ translate('Music') }}</th>
-                                      <td>{{ $member->hobbies->music ?? '' }}</td>
+                                                                                                        <th>{{ translate('Interests') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->interests ?? '' }}</td>
+                                                                                                        </tr>
+                                                                                                                      <tr>
+                                                                                                        <th>{{ translate('Music') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->music ?? '' }}</td>
 
-                    <th>{{ translate('Books') }}</th>
-                                      <td>{{ $member->hobbies->books ?? '' }}</td>
-                    </tr>
-                                  <tr>
-                    <th>{{ translate('Movies') }}</th>
-                                      <td>{{ $member->hobbies->movies ?? '' }}</td>
+                                                                                                        <th>{{ translate('Books') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->books ?? '' }}</td>
+                                                                                                        </tr>
+                                                                                                                      <tr>
+                                                                                                        <th>{{ translate('Movies') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->movies ?? '' }}</td>
 
-                    <th>{{ translate('TV Shows') }}</th>
-                                      <td>{{ $member->hobbies->tv_shows ?? '' }}</td>
-                    </tr>
-                                  <tr>
-              <th>{{ translate('Sports') }}</th>
-                                      <td>{{ $member->hobbies->sports ?? '' }}</td>
+                                                                                                        <th>{{ translate('TV Shows') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->tv_shows ?? '' }}</td>
+                                                                                                        </tr>
+                                                                                                                      <tr>
+                                                                                                  <th>{{ translate('Sports') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->sports ?? '' }}</td>
 
-              <th>{{ translate('Fitness Activities') }}</th>
-                                      <td>{{ $member->hobbies->fitness_activities ?? '' }}</td>
-              </tr>
-                                  <tr>
-              <th>{{ translate('Cuisines') }}</th>
-                                      <td>{{ $member->hobbies->cuisines ?? '' }}</td>
+                                                                                                  <th>{{ translate('Fitness Activities') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->fitness_activities ?? '' }}</td>
+                                                                                                  </tr>
+                                                                                                                      <tr>
+                                                                                                  <th>{{ translate('Cuisines') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->cuisines ?? '' }}</td>
 
-              <th>{{ translate('Dress Styles') }}</th>
-                                      <td>{{ $member->hobbies->dress_styles ?? '' }}</td>
-              </tr>
-                          </table>
-                      </div>
-                  </div>-->
+                                                                                                  <th>{{ translate('Dress Styles') }}</th>
+                                                                                                                          <td>{{ $member->hobbies->dress_styles ?? '' }}</td>
+                                                                                                  </tr>
+                                                                                                              </table>
+                                                                                                          </div>
+                                                                                                      </div>-->
             @endif
 
             <!-- Personal Attitude & Behavior -->
             @if (get_setting('member_personal_attitude_and_behavior_section') == 'on')
                 <!--<div class="card">
-                      <div class="card-header bg-dark text-white">
-                          <h5 class="mb-0 h6">{{ translate('Personal Attitude & Behavior') }}</h5>
-                      </div>
-                      <div class="card-body">
-                          <table class="table">
-          <tr>
-                <th>{{ translate('Affection') }}</th>
-                                      <td>{{ $member->attitude->affection ?? '' }}</td>
+                                                                                                          <div class="card-header bg-dark text-white">
+                                                                                                              <h5 class="mb-0 h6">{{ translate('Personal Attitude & Behavior') }}</h5>
+                                                                                                          </div>
+                                                                                                          <div class="card-body">
+                                                                                                              <table class="table">
+                                                                                              <tr>
+                                                                                                    <th>{{ translate('Affection') }}</th>
+                                                                                                                          <td>{{ $member->attitude->affection ?? '' }}</td>
 
-                                      <th>{{ translate('Humor') }}</th>
-                                      <td>{{ $member->attitude->humor ?? '' }}</td>
-              </tr>
-                                   <tr>
-                                      <th>{{ translate('Political Views') }}</th>
-                                      <td>{{ $member->attitude->political_views ?? '' }}</td>
+                                                                                                                          <th>{{ translate('Humor') }}</th>
+                                                                                                                          <td>{{ $member->attitude->humor ?? '' }}</td>
+                                                                                                  </tr>
+                                                                                                                       <tr>
+                                                                                                                          <th>{{ translate('Political Views') }}</th>
+                                                                                                                          <td>{{ $member->attitude->political_views ?? '' }}</td>
 
-                                      <th>{{ translate('Religious Service') }}</th>
-                                      <td>{{ $member->attitude->religious_service ?? '' }}</td>
-                                  </tr>
-                          </table>
-                      </div>
-                  </div>-->
+                                                                                                                          <th>{{ translate('Religious Service') }}</th>
+                                                                                                                          <td>{{ $member->attitude->religious_service ?? '' }}</td>
+                                                                                                                      </tr>
+                                                                                                              </table>
+                                                                                                          </div>
+                                                                                                      </div>-->
             @endif
 
             <!-- Residency Information -->
@@ -502,55 +509,55 @@
             <!-- Life Style -->
             @if (get_setting('member_life_style_section') == 'on')
                 <!-- <div class="card">
-                      <div class="card-header bg-dark text-white">
-                          <h5 class="mb-0 h6">{{ translate('Life Style') }}</h5>
-                      </div>
-                      <div class="card-body">
-                          <table class="table">
-          <tr>
-                                  <th>{{ translate('Diet') }}</th>
-                                  <td>{{ $member->lifestyles->diet ?? '' }}</td>
+                                                                                                          <div class="card-header bg-dark text-white">
+                                                                                                              <h5 class="mb-0 h6">{{ translate('Life Style') }}</h5>
+                                                                                                          </div>
+                                                                                                          <div class="card-body">
+                                                                                                              <table class="table">
+                                                                                              <tr>
+                                                                                                                      <th>{{ translate('Diet') }}</th>
+                                                                                                                      <td>{{ $member->lifestyles->diet ?? '' }}</td>
 
-                                  <th>{{ translate('Drink') }}</th>
-                                  <td>{{ $member->lifestyles->drink ?? '' }}</td>
-                              </tr>
-                              <tr>
-                                  <th>{{ translate('Smoke') }}</th>
-                                  <td>{{ $member->lifestyles->smoke ?? '' }}</td>
+                                                                                                                      <th>{{ translate('Drink') }}</th>
+                                                                                                                      <td>{{ $member->lifestyles->drink ?? '' }}</td>
+                                                                                                                  </tr>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Smoke') }}</th>
+                                                                                                                      <td>{{ $member->lifestyles->smoke ?? '' }}</td>
 
-                                  <th>{{ translate('Living With') }}</th>
-                                  <td>{{ $member->lifestyles->living_with ?? '' }}</td>
-                              </tr>
-                          </table>
-                      </div>
-                  </div>-->
+                                                                                                                      <th>{{ translate('Living With') }}</th>
+                                                                                                                      <td>{{ $member->lifestyles->living_with ?? '' }}</td>
+                                                                                                                  </tr>
+                                                                                                              </table>
+                                                                                                          </div>
+                                                                                                      </div>-->
             @endif
 
             <!-- Astronomic Information  -->
             @if (get_setting('member_astronomic_information_section') == 'on')
                 <!-- <div class="card">
-                      <div class="card-header bg-dark text-white">
-                          <h5 class="mb-0 h6">{{ translate('Astronomic Information') }}</h5>
-                      </div>
-                      <div class="card-body">
-                          <table class="table">
-                              <tr>
-                                  <th>{{ translate('Sun Sign') }}</th>
-                                  <td>{{ $member->astrologies->sun_sign ?? '' }}</td>
+                                                                                                          <div class="card-header bg-dark text-white">
+                                                                                                              <h5 class="mb-0 h6">{{ translate('Astronomic Information') }}</h5>
+                                                                                                          </div>
+                                                                                                          <div class="card-body">
+                                                                                                              <table class="table">
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Sun Sign') }}</th>
+                                                                                                                      <td>{{ $member->astrologies->sun_sign ?? '' }}</td>
 
-                                  <th>{{ translate('Moon Sign') }}</th>
-                                  <td>{{ $member->astrologies->moon_sign ?? '' }}</td>
-                              </tr>
-                              <tr>
-                                  <th>{{ translate('Time Of Birth') }}</th>
-                                  <td>{{ $member->astrologies->time_of_birth ?? '' }}</td>
+                                                                                                                      <th>{{ translate('Moon Sign') }}</th>
+                                                                                                                      <td>{{ $member->astrologies->moon_sign ?? '' }}</td>
+                                                                                                                  </tr>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Time Of Birth') }}</th>
+                                                                                                                      <td>{{ $member->astrologies->time_of_birth ?? '' }}</td>
 
-                                  <th>{{ translate('City Of Birth') }}</th>
-                                  <td>{{ $member->astrologies->city_of_birth ?? '' }}</td>
-                              </tr>
-                          </table>
-                      </div>
-                  </div>-->
+                                                                                                                      <th>{{ translate('City Of Birth') }}</th>
+                                                                                                                      <td>{{ $member->astrologies->city_of_birth ?? '' }}</td>
+                                                                                                                  </tr>
+                                                                                                              </table>
+                                                                                                          </div>
+                                                                                                      </div>-->
             @endif
 
 
@@ -619,25 +626,28 @@
                             <!--</tr>-->
                             @php
                                 $index = '0';
-
-                                $siblings = !empty($member->families->sibling)
-                                    ? json_decode($member->families->sibling)
-                                    : [];
-                                $siblingPhones = !empty($member->families->sibiling_phone)
-                                    ? json_decode($member->families->sibiling_phone)
-                                    : [];
-                                $maritalStatuses = !empty($member->families->sibling_m_s)
-                                    ? json_decode($member->families->sibling_m_s)
-                                    : [];
-                                $Yon_old = !empty($member->families->Yon_old)
-                                    ? json_decode($member->families->Yon_old)
-                                    : [];
-                                $relation = !empty($member->families->relation)
-                                    ? json_decode($member->families->relation)
-                                    : [];
-                                $maritalStatusNames = \App\Models\MaritalStatus::whereIn('id', $maritalStatuses)
-                                    ->pluck('name')
-                                    ->toArray();
+                                if (!empty($member->families->sibling)) {
+                                    if ($member->families->sibling != null && $member->families->sibling != 'null') {
+                                        $siblings = !empty($member->families->sibling)
+                                            ? json_decode($member->families->sibling)
+                                            : [];
+                                        $siblingPhones = !empty($member->families->sibiling_phone)
+                                            ? json_decode($member->families->sibiling_phone)
+                                            : [];
+                                        $maritalStatuses = !empty($member->families->sibling_m_s)
+                                            ? json_decode($member->families->sibling_m_s)
+                                            : [];
+                                        $Yon_old = !empty($member->families->Yon_old)
+                                            ? json_decode($member->families->Yon_old)
+                                            : [];
+                                        $relation = !empty($member->families->relation)
+                                            ? json_decode($member->families->relation)
+                                            : [];
+                                        $maritalStatusNames = \App\Models\MaritalStatus::whereIn('id', $maritalStatuses)
+                                            ->pluck('name')
+                                            ->toArray();
+                                    }
+                                }
                             @endphp
                             @if (
                                 !empty($siblings) &&
@@ -696,119 +706,153 @@
             <!-- Partner Expectation -->
             @if (get_setting('member_partner_expectation_section') == 'on')
                 <!-- <div class="card">
-                      <div class="card-header bg-dark text-white">
-                          <h5 class="mb-0 h6">{{ translate('Partner Expectation') }}</h5>
-                      </div>
-                      <div class="card-body">
-                          <table class="table">
-                              <tr>
-                                  <th>{{ translate('General') }}</th>
-                                  <td>{{ $member->partner_expectations->general ?? '' }}</td>
+                                                                                                          <div class="card-header bg-dark text-white">
+                                                                                                              <h5 class="mb-0 h6">{{ translate('Partner Expectation') }}</h5>
+                                                                                                          </div>
+                                                                                                          <div class="card-body">
+                                                                                                              <table class="table">
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('General') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->general ?? '' }}</td>
 
-                                  <th>{{ translate('Residence Country') }}</th>
-                                  <td>
-                                      @php
-                                          $residence_country =
-                                              $member->partner_expectations->residence_country_id ?? '';
-                                          if (!empty($residence_country)) {
-                                              echo \App\Models\Country::where('id', $residence_country)->first()->name;
-                                          }
-                                      @endphp
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <th>{{ translate('Height') }}</th>
-                                  <td>{{ $member->partner_expectations->height ?? '' }}</td>
+                                                                                                                      <th>{{ translate('Residence Country') }}</th>
+                                                                                                                      <td>
+                                                                                                                          @php
+                                                                                                                              $residence_country =
+                                                                                                                                  $member
+                                                                                                                                      ->partner_expectations
+                                                                                                                                      ->residence_country_id ??
+                                                                                                                                  '';
+                                                                                                                              if (
+                                                                                                                                  !empty(
+                                                                                                                                      $residence_country
+                                                                                                                                  )
+                                                                                                                              ) {
+                                                                                                                                  echo \App\Models\Country::where(
+                                                                                                                                      'id',
+                                                                                                                                      $residence_country,
+                                                                                                                                  )->first()
+                                                                                                                                      ->name;
+                                                                                                                              }
+                                                                                                                          @endphp
+                                                                                                                      </td>
+                                                                                                                  </tr>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Height') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->height ?? '' }}</td>
 
-                                  <th>{{ translate('weight') }}</th>
-                                  <td>{{ $member->partner_expectations->weight ?? '' }}</td>
-                              </tr>
+                                                                                                                      <th>{{ translate('weight') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->weight ?? '' }}</td>
+                                                                                                                  </tr>
 
-                              <tr>
-                                  <th>{{ translate('Marital Status') }}</th>
-                                  <td>{{ $member->partner_expectations->marital_status->name ?? '' }}</td>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Marital Status') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->marital_status->name ?? '' }}</td>
 
-                                  <th>{{ translate('Children Acceptable') }}</th>
-                                  <td>{{ !empty($member->partner_expectations->children_acceptable) ? attribute_text_format($member->partner_expectations->children_acceptable) : '' }}</td>
-                              </tr>
+                                                                                                                      <th>{{ translate('Children Acceptable') }}</th>
+                                                                                                                      <td>{{ !empty($member->partner_expectations->children_acceptable) ? attribute_text_format($member->partner_expectations->children_acceptable) : '' }}</td>
+                                                                                                                  </tr>
 
-                              <tr>
-                                  <th>{{ translate('Religion') }}</th>
-                                  <td>{{ $member->partner_expectations->religion->name ?? '' }}</td>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Religion') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->religion->name ?? '' }}</td>
 
-                                  <th>{{ translate('Caste') }}</th>
-                                  <td>{{ $member->partner_expectations->caste->name ?? '' }}</td>
-                              </tr>
+                                                                                                                      <th>{{ translate('Caste') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->caste->name ?? '' }}</td>
+                                                                                                                  </tr>
 
-                              <tr>
-                                  <th>{{ translate('Sub Caste') }}</th>
-                                  <td>{{ $member->partner_expectations->sub_caste->name ?? '' }}</td>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Sub Caste') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->sub_caste->name ?? '' }}</td>
 
-                                  <th>{{ translate('Language') }}</th>
-                                  <td>{{ $member->partner_expectations->member_language->name ?? '' }}</td>
-                              </tr>
+                                                                                                                      <th>{{ translate('Language') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->member_language->name ?? '' }}</td>
+                                                                                                                  </tr>
 
-                              <tr>
-                                  <th>{{ translate('Education') }}</th>
-                                  <td>{{ $member->partner_expectations->education ?? '' }}</td>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Education') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->education ?? '' }}</td>
 
-                                  <th>{{ translate('Profession') }}</th>
-                                  <td>{{ $member->partner_expectations->profession ?? '' }}</td>
-                              </tr>
+                                                                                                                      <th>{{ translate('Profession') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->profession ?? '' }}</td>
+                                                                                                                  </tr>
 
-                              <tr>
-                                  <th>{{ translate('Smoking Acceptable') }}</th>
-                                  <td>{{ !empty($member->partner_expectations->smoking_acceptable) ? attribute_text_format($member->partner_expectations->smoking_acceptable) : '' }}</td>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Smoking Acceptable') }}</th>
+                                                                                                                      <td>{{ !empty($member->partner_expectations->smoking_acceptable) ? attribute_text_format($member->partner_expectations->smoking_acceptable) : '' }}</td>
 
-                                  <th>{{ translate('Drinking Acceptable') }}</th>
-                                  <td>{{ !empty($member->partner_expectations->drinking_acceptable) ? attribute_text_format($member->partner_expectations->drinking_acceptable) : '' }}</td>
-                              </tr>
-                              <tr>
-                                  <th>{{ translate('Diet') }}</th>
-                                  <td>{{ !empty($member->partner_expectations->diet) ? attribute_text_format($member->partner_expectations->diet) : '' }}</td>
+                                                                                                                      <th>{{ translate('Drinking Acceptable') }}</th>
+                                                                                                                      <td>{{ !empty($member->partner_expectations->drinking_acceptable) ? attribute_text_format($member->partner_expectations->drinking_acceptable) : '' }}</td>
+                                                                                                                  </tr>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Diet') }}</th>
+                                                                                                                      <td>{{ !empty($member->partner_expectations->diet) ? attribute_text_format($member->partner_expectations->diet) : '' }}</td>
 
-                                  <th>{{ translate('Body Type') }}</th>
-                                  <td>{{ $member->partner_expectations->body_type ?? '' }}</td>
-                              </tr>
-                              <tr>
-                                  <th>{{ translate('Personal Value') }}</th>
-                                  <td>{{ $member->partner_expectations->personal_value ?? '' }}</td>
+                                                                                                                      <th>{{ translate('Body Type') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->body_type ?? '' }}</td>
+                                                                                                                  </tr>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Personal Value') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->personal_value ?? '' }}</td>
 
-                                  <th>{{ translate('Manglik') }}</th>
-                                  <td>{{ !empty($member->partner_expectations->manglik) ? attribute_text_format($member->partner_expectations->manglik) : '' }}</td>
-                              </tr>
-                              <tr>
-                                  <th>{{ translate('Preferred Country') }}</th>
-                                  <td>
-                                      @php
-                                          $preferred_country =
-                                              $member->partner_expectations->preferred_country_id ?? '';
-                                          if (!empty($preferred_country)) {
-                                              echo \App\Models\Country::where('id', $preferred_country)->first()->name;
-                                          }
-                                      @endphp
-                                  </td>
+                                                                                                                      <th>{{ translate('Manglik') }}</th>
+                                                                                                                      <td>{{ !empty($member->partner_expectations->manglik) ? attribute_text_format($member->partner_expectations->manglik) : '' }}</td>
+                                                                                                                  </tr>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Preferred Country') }}</th>
+                                                                                                                      <td>
+                                                                                                                          @php
+                                                                                                                              $preferred_country =
+                                                                                                                                  $member
+                                                                                                                                      ->partner_expectations
+                                                                                                                                      ->preferred_country_id ??
+                                                                                                                                  '';
+                                                                                                                              if (
+                                                                                                                                  !empty(
+                                                                                                                                      $preferred_country
+                                                                                                                                  )
+                                                                                                                              ) {
+                                                                                                                                  echo \App\Models\Country::where(
+                                                                                                                                      'id',
+                                                                                                                                      $preferred_country,
+                                                                                                                                  )->first()
+                                                                                                                                      ->name;
+                                                                                                                              }
+                                                                                                                          @endphp
+                                                                                                                      </td>
 
-                                  <th>{{ translate('preferred_state_id') }}</th>
-                                  <td>
-                                      @php
-                                          $preferred_state = $member->partner_expectations->preferred_state_id ?? '';
-                                          if (!empty($preferred_state)) {
-                                              echo \App\Models\State::where('id', $preferred_state)->first()->name;
-                                          }
-                                      @endphp
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <th>{{ translate('Family Value') }}</th>
-                                  <td>{{ $member->partner_expectations->family_value->name ?? '' }}</td>
+                                                                                                                      <th>{{ translate('preferred_state_id') }}</th>
+                                                                                                                      <td>
+                                                                                                                          @php
+                                                                                                                              $preferred_state =
+                                                                                                                                  $member
+                                                                                                                                      ->partner_expectations
+                                                                                                                                      ->preferred_state_id ??
+                                                                                                                                  '';
+                                                                                                                              if (
+                                                                                                                                  !empty(
+                                                                                                                                      $preferred_state
+                                                                                                                                  )
+                                                                                                                              ) {
+                                                                                                                                  echo \App\Models\State::where(
+                                                                                                                                      'id',
+                                                                                                                                      $preferred_state,
+                                                                                                                                  )->first()
+                                                                                                                                      ->name;
+                                                                                                                              }
+                                                                                                                          @endphp
+                                                                                                                      </td>
+                                                                                                                  </tr>
+                                                                                                                  <tr>
+                                                                                                                      <th>{{ translate('Family Value') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->family_value->name ?? '' }}</td>
 
-                                  <th>{{ translate('complexion') }}</th>
-                                  <td>{{ $member->partner_expectations->complexion ?? '' }}</td>
-                              </tr>
-                          </table>
-                      </div>
-                  </div>-->
+                                                                                                                      <th>{{ translate('complexion') }}</th>
+                                                                                                                      <td>{{ $member->partner_expectations->complexion ?? '' }}</td>
+                                                                                                                  </tr>
+                                                                                                              </table>
+                                                                                                          </div>
+                                                                                                      </div>-->
             @endif
 
         </div>
@@ -816,6 +860,41 @@
 @endsection
 
 @section('modal')
+    {{-- Member Approval Modal --}}
+    <div class="modal fade member-approval-modal" id="modal-basic">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title h6">{{ translate('Member Approval !') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body text-center">
+                    {{-- <form class="form-horizontal member-block" action="{{ route('members.approve') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="member_id" id="member_id" value="">
+                        <p class="mt-1">{{ translate('Are you sure to approve this member?') }}</p>
+                        <select class="form-control aiz-selectpicker" name="status" id="" required>
+                            <option value="">{{ translate('Select Status') }}</option>
+                            <option value="1">{{ translate('Approve') }}</option>
+                            <option value="0">{{ translate('Reject') }}</option>
+                        </select>
+                        <button type="button" class="btn btn-light mt-2"
+                            data-dismiss="modal">{{ translate('Cancel') }}</button>
+                        <button type="submit" class="btn btn-primary mt-2">{{ translate('Approve') }}</button>
+                    </form> --}}
+                    <form class="form-horizontal member-block" action="{{ route('members.approve') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="member_id" id="member_id" value="">
+                        <p class="mt-1">{{ translate('Are you sure to approve this member?') }}</p>
+                        <button type="button" class="btn btn-light mt-2"
+                            data-dismiss="modal">{{ translate('Cancel') }}</button>
+                        <button type="submit" class="btn btn-primary mt-2">{{ translate('Approve') }}</a>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
     {{-- Member Block Modal --}}
     <div class="modal fade member-block-modal" id="modal-basic">
         <div class="modal-dialog">
@@ -889,6 +968,11 @@
                 $('.create_edit_modal_content').html(data);
                 $('.create_edit_modal').modal('show');
             });
+        }
+
+        function approve_member(id) {
+            $('.member-approval-modal').modal('show');
+            $('#member_id').val(id);
         }
 
         function get_package(id) {

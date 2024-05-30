@@ -3,11 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Caste extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
+
+    protected $fillable = [
+        'name',
+        'religion_id',
+    ];
 
     public function religion()
     {

@@ -348,8 +348,12 @@ class MemberController extends Controller
 
     public function approve(Request $request)
     {
+        $status = 1;
+        // if($request->status == 0){
+        //     $status = 0;
+        // }
         $member             = User::findOrFail($request->member_id);
-        $member->approved   = 1;
+        $member->approved   = $status;
         if ($member->save()) {
 
             // Account approval email send to members
@@ -709,7 +713,7 @@ class MemberController extends Controller
             $member->introduction = $request->introduction;
             $member->gender             = $request->gender;
             $member->on_behalves_id     = $request->on_behalf;
-            $member->birthday           = date('Y-m-d', strtotime($request->date_of_birth));
+            $member->birthday           = $member->birthday = date('Y-m-d', strtotime('01-01-' . $request->date_of_birth));
             $member->marital_status_id  = $request->marital_status;
             $member->children           = $request->children;
             $member->mothere_tongue     = $request->mothere_tongue;
@@ -863,7 +867,7 @@ $validator  = Validator::make($request->all(), $rules);
                 'ethnicity'            => ['max:255'],
                 'personal_value'       => ['max:255'],
                 'community_value'      => ['max:255'],
-                'member_sub_caste_id'   => ['required'],
+                // 'member_sub_caste_id'   => ['required'],
                 'family_value_id'   => ['required'],
 //
             ];
@@ -878,10 +882,21 @@ $validator  = Validator::make($request->all(), $rules);
                 $spiritual_backgrounds          = new SpiritualBackground;
                 $spiritual_backgrounds->user_id = $id;
             }
-
+            $member_caste_id = $request->member_caste_id;
+            if($request->member_caste_id == 'other') {
+                if(empty($request->member_caste_other)) {
+                    flash(translate('Please enter Caste'))->error();
+                    return back();
+                }
+                $createCaste = Caste::create([
+                    'name' => $request->member_caste_other,
+                    'religion_id' => $request->member_religion_id
+                ]);
+                $member_caste_id = $createCaste->id;
+            }
             $spiritual_backgrounds->religion_id        = $request->member_religion_id;
-            $spiritual_backgrounds->caste_id           = $request->member_caste_id;
-            $spiritual_backgrounds->sub_caste_id       = $request->member_sub_caste_id;
+            $spiritual_backgrounds->caste_id           = $member_caste_id;
+            // $spiritual_backgrounds->sub_caste_id       = $request->member_sub_caste_id;
             $spiritual_backgrounds->ethnicity           = $request->ethnicity;
             $spiritual_backgrounds->personal_value       = $request->personal_value;
             $spiritual_backgrounds->family_value_id       = $request->family_value_id;

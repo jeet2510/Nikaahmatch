@@ -11,7 +11,10 @@ class ChatController extends Controller
 {
     public function index(Request $request)
     {
-      $chat_threads = ChatThread::where('sender_user_id', Auth::user()->id)->orWhere('receiver_user_id', Auth::user()->id)->get();
+        $chat_threads = ChatThread::where('sender_user_id', Auth::user()->id)
+        ->orWhere('receiver_user_id', Auth::user()->id)
+        ->latest() // Order by latest created date
+        ->get();
       return view('frontend.member.messages.index', compact('chat_threads'));
     }
 

@@ -41,7 +41,7 @@
                                             <div class="text-center pt-3 pb-2">
                                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-todo-list/check1.webp"
                                                     alt="Check" width="60">
-                                                <h2 class="my-4">Added Members List</h2>
+                                                <h2 class="my-4">Added Candidate</h2>
 
 
                                             </div>
@@ -49,7 +49,7 @@
 
                                                 <a href="{{ route('parent.addchild') }}" class="btn btn-warning">
                                                     <span
-                                                        class="text-primary-grad mb-n1">{{ translate('Add Member') }}</span>
+                                                        class="text-primary-grad mb-n1">{{ translate('Add Candidate') }}</span>
                                                 </a>
 
                                             </div>
@@ -105,9 +105,9 @@
                                                             </tr>
                                                         @endforeach
                                                     @else
-                                                        <tr>
+                                                        {{-- <tr>
                                                             <span>{{ translate('No child found') }}</span>
-                                                        </tr>
+                                                        </tr> --}}
                                                     @endif
                                                 </tbody>
 
