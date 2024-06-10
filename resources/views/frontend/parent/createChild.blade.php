@@ -35,7 +35,7 @@
                         <div class="card-body">
 
                             <div class="mb-5 text-center">
-                                <h1 class="h3 text-primary mb-0">{{ translate('Create Your Child\'s Account') }}</h1>
+                                <h1 class="h3 text-primary mb-0">{{ translate('Create Candidate\'s Account') }}</h1>
                                 <p>{{ translate('Fill out the form to get started') }}.</p>
                             </div>
 
@@ -112,7 +112,7 @@
 
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-6">
                                         <div class="form-group mb-3">
                                             <label class="form-label" for="name">{{ translate('Last Name') }}</label>
                                             <input type="text"
@@ -124,46 +124,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-lg-3">
 
-                                        <div class="form-group mb-3 ">
-                                            @php
-                                                $countries = \App\Models\CountryCode::all();
-                                            @endphp
-                                            <label class="form-label"
-                                                for="country_code">{{ translate('Country Code') }}</label>
-
-
-                                            <select name="country_code"
-                                                id="country_code"class="form-control aiz-selectpicker">
-
-                                                @foreach ($countries as $code)
-                                                    <option value="{{ $code->phonecode }}"
-                                                        @if ($code->phonecode == '971') selected @endif>
-                                                        +{{ $code->phonecode }}</option>
-                                                @endforeach
-                                            </select>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-5">
-
-                                        <div class="form-group mb-3">
-
-                                            <label class="form-label"
-                                                for="phone">{{ translate('Mobile Number') }}</label>
-
-                                            <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                                onchange="validation();" name="phone" value="{{ old('phone') }}"
-                                                id="phone" placeholder="{{ translate('Mobile Number') }}">
-                                            @error('phone')
-                                                <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group mb-3">
                                             <label class="form-label" for="gender">{{ translate('Gender') }}</label>
@@ -177,23 +138,69 @@
                                                 <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                             @enderror
                                         </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group mb-3 ">
+                                            @php
+                                                $countries = \App\Models\CountryCode::all();
+                                            @endphp
+
+                                            <label class="form-label"
+                                                for="country_code">{{ translate('Country Code') }}</label>
+
+
+                                            <select name="country_code"
+                                                id="country_code"class="form-control aiz-selectpicker">
+
+                                                @foreach ($countries as $code)
+                                                    <option value="{{ $code->phonecode }}"
+                                                        @if ($code->phonecode == '971') selected @endif>
+                                                        +{{ $code->phonecode . ' (' . $code->name . ')' }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group mb-3">
+
                                             <label class="form-label"
-                                                for="name">{{ translate('Date Of Birth') }}</label>
-                                            <input type="text" onchange="validation();"
-                                                class="form-control aiz-date-range @error('date_of_birth') is-invalid @enderror"
-                                                name="date_of_birth" id="date_of_birth"
-                                                placeholder="{{ translate('Date Of Birth') }}" data-single="true"
-                                                data-show-dropdown="true" data-max-date="{{ get_max_date() }}"
-                                                autocomplete="off" value="{{ old('date_of_birth') }}" required>
-                                            @error('date_of_birth')
+                                                for="phone">{{ translate('Mobile Number') }}</label>
+
+                                            <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                                onchange="validation();" name="phone" value="{{ old('phone') }}"
+                                                id="phone" placeholder="{{ translate('Mobile Number') }}">
+                                            @error('phone')
                                                 <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                             @enderror
                                         </div>
+
                                     </div>
                                 </div>
+
+                                <div class="form-group mb-3">
+                                    <div class="" style="max-width: 120px;">
+                                        <label class="form-label"
+                                            for="date_of_birth">{{ translate('Year Of Birth') }}</label>
+                                        <select class="form-control @error('date_of_birth') is-invalid @enderror"
+                                            name="date_of_birth" id="date_of_birth" required>
+                                            @for ($year = now()->year - 18; $year >= 1970; $year--)
+                                                <option value="{{ $year }}"
+                                                    {{ old('date_of_birth') == $year ? 'selected' : '' }}>
+                                                    {{ $year }}</option>
+                                            @endfor
+                                        </select>
+                                        @error('date_of_birth')
+                                            <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
+
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group mb-3">
@@ -284,7 +291,7 @@
 
                                 <div class="mb-5">
                                     <button type="submit" class="btn btn-block btn-primary"
-                                        id="submitBtn">{{ translate('Create Child\'s Account') }}</button>
+                                        id="submitBtn">{{ translate('Create Candidate\'s Account') }}</button>
                                     <button type="button" class="btn btn-block btn-primary" id="disable"
                                         disable>{{ translate('Fill Required Details') }}</button>
                                     <div id="errorMsg" class="text-danger mt-2" style="display: none;"></div>
@@ -413,66 +420,66 @@
 
     <script>
         /* document.addEventListener('DOMContentLoaded', function () {
-                                    var form = $("#reg-form");
-                                    var submitBtn = $("#submitBtn");
-                                    var errorMsg = $("#errorMsg");
+                                                                                                        var form = $("#reg-form");
+                                                                                                        var submitBtn = $("#submitBtn");
+                                                                                                        var errorMsg = $("#errorMsg");
 
-                                    // Initialize jQuery Validation
-                                    form.validate({
-                                        rules: {
-                                            first_name: "required",
-                                            phone: "required",
-                                            date_of_birth: "required",
-                                            email: {
-                                                required: true,
-                                                email: true
-                                            },
-                            				password: {
-                                                required: true,
-                                                minlength: 8,
-                                            },
-                                            password_confirmation: {
-                                                required: true,
-                                                equalTo: "#password"
-                                            },
-                                            checkbox_example_1: "required"
-                                        },
-                                        messages: {
-                                            first_name: "Please enter your First Name.",
-                                            phone: "Please enter your Mobile Number.",
-                                            date_of_birth: "Please enter your Date of Birth.",
-                                            email: "Please enter a valid email address.",
-                                            password: {
-                                                required: "",
-                                                minlength: "",
-                                            },
-                                            password_confirmation: {
-                                                required: "Please confirm your password.",
-                                                !equalTo: "Password and Confirm Password must match."
-                                            },
-                                            checkbox_example_1: "Please agree to the terms and conditions."
-                                        },
-                                        errorPlacement: function (error, element) {
-                                    // Check if the element has a specific ID for error placement
-                                    var errorElementId = element.attr('id') + '_error';
-                                    var errorElement = $("#" + errorElementId);
+                                                                                                        // Initialize jQuery Validation
+                                                                                                        form.validate({
+                                                                                                            rules: {
+                                                                                                                first_name: "required",
+                                                                                                                phone: "required",
+                                                                                                                date_of_birth: "required",
+                                                                                                                email: {
+                                                                                                                    required: true,
+                                                                                                                    email: true
+                                                                                                                },
+                                                                                                				password: {
+                                                                                                                    required: true,
+                                                                                                                    minlength: 8,
+                                                                                                                },
+                                                                                                                password_confirmation: {
+                                                                                                                    required: true,
+                                                                                                                    equalTo: "#password"
+                                                                                                                },
+                                                                                                                checkbox_example_1: "required"
+                                                                                                            },
+                                                                                                            messages: {
+                                                                                                                first_name: "Please enter your First Name.",
+                                                                                                                phone: "Please enter your Mobile Number.",
+                                                                                                                date_of_birth: "Please enter your Date of Birth.",
+                                                                                                                email: "Please enter a valid email address.",
+                                                                                                                password: {
+                                                                                                                    required: "",
+                                                                                                                    minlength: "",
+                                                                                                                },
+                                                                                                                password_confirmation: {
+                                                                                                                    required: "Please confirm your password.",
+                                                                                                                    !equalTo: "Password and Confirm Password must match."
+                                                                                                                },
+                                                                                                                checkbox_example_1: "Please agree to the terms and conditions."
+                                                                                                            },
+                                                                                                            errorPlacement: function (error, element) {
+                                                                                                        // Check if the element has a specific ID for error placement
+                                                                                                        var errorElementId = element.attr('id') + '_error';
+                                                                                                        var errorElement = $("#" + errorElementId);
 
-                                    if (errorElement.length) {
-                                        // If the error element exists, display the error message in it
-                                        errorElement.html(error);
-                                    } else {
-                                        // Otherwise, display the error message after the input element
-                                        error.insertAfter(element);
-                                    }
-                                },
-                                        submitHandler: function (form) {
-                                            // Log the form data
-                                            console.log($(form).serializeArray());
-                                            // Your existing submit handler code...
-                                        }
-                                    });
+                                                                                                        if (errorElement.length) {
+                                                                                                            // If the error element exists, display the error message in it
+                                                                                                            errorElement.html(error);
+                                                                                                        } else {
+                                                                                                            // Otherwise, display the error message after the input element
+                                                                                                            error.insertAfter(element);
+                                                                                                        }
+                                                                                                    },
+                                                                                                            submitHandler: function (form) {
+                                                                                                                // Log the form data
+                                                                                                                console.log($(form).serializeArray());
+                                                                                                                // Your existing submit handler code...
+                                                                                                            }
+                                                                                                        });
 
-                                });*/
+                                                                                                    });*/
     </script>
 
     <script>

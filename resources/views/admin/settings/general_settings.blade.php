@@ -37,9 +37,8 @@
                                 <input type="hidden" name="types[]" value="timezone">
                                 <select name="timezone" class="form-control aiz-selectpicker" data-live-search="true">
                                     @foreach (timezones() as $key => $value)
-                                        <option value="{{ $value }}" @if (env('APP_TIMEZONE') == $value)
-                                            selected
-                                    @endif>{{ $key }}</option>
+                                        <option value="{{ $value }}"
+                                            @if (env('APP_TIMEZONE') == $value) selected @endif>{{ $key }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -76,13 +75,18 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-from-label">{{ translate('Member Profile Picture Privacy') }}</label>
+                            <label
+                                class="col-sm-3 col-from-label">{{ translate('Member Profile Picture Privacy') }}</label>
                             <div class="col-sm-9">
                                 <input type="hidden" name="types[]" value="profile_picture_privacy">
-                                <select class="form-control aiz-selectpicker" data-live-search="true" name="profile_picture_privacy" required>
-                                    <option value="all" @if(get_setting('profile_picture_privacy') == 'all') selected @endif>{{ translate('All') }}</option>
-                                    <option value="only_me" @if(get_setting('profile_picture_privacy') == 'only_me') selected @endif>{{ translate('Only Me') }}</option>
-                                    <option value="premium_members" @if(get_setting('profile_picture_privacy') == 'premium_members') selected @endif>{{ translate('Premium Members') }}</option>
+                                <select class="form-control aiz-selectpicker" data-live-search="true"
+                                    name="profile_picture_privacy" required>
+                                    <option value="all" @if (get_setting('profile_picture_privacy') == 'all') selected @endif>
+                                        {{ translate('All') }}</option>
+                                    <option value="only_me" @if (get_setting('profile_picture_privacy') == 'only_me') selected @endif>
+                                        {{ translate('Only Me') }}</option>
+                                    <option value="premium_members" @if (get_setting('profile_picture_privacy') == 'premium_members') selected @endif>
+                                        {{ translate('Premium Members') }}</option>
                                 </select>
                             </div>
                         </div>
@@ -90,10 +94,14 @@
                             <label class="col-sm-3 col-from-label">{{ translate('Member Gallery Image Privacy') }}</label>
                             <div class="col-sm-9">
                                 <input type="hidden" name="types[]" value="gallery_image_privacy">
-                                <select class="form-control aiz-selectpicker" data-live-search="true" name="gallery_image_privacy" required>
-                                    <option value="all" @if(get_setting('gallery_image_privacy') == 'all') selected @endif>{{ translate('All') }}</option>
-                                    <option value="only_me" @if(get_setting('gallery_image_privacy') == 'only_me') selected @endif>{{ translate('Only Me') }}</option>
-                                    <option value="premium_members" @if(get_setting('gallery_image_privacy') == 'premium_members') selected @endif>{{ translate('Premium Members') }}</option>
+                                <select class="form-control aiz-selectpicker" data-live-search="true"
+                                    name="gallery_image_privacy" required>
+                                    <option value="all" @if (get_setting('gallery_image_privacy') == 'all') selected @endif>
+                                        {{ translate('All') }}</option>
+                                    <option value="only_me" @if (get_setting('gallery_image_privacy') == 'only_me') selected @endif>
+                                        {{ translate('Only Me') }}</option>
+                                    <option value="premium_members" @if (get_setting('gallery_image_privacy') == 'premium_members') selected @endif>
+                                        {{ translate('Premium Members') }}</option>
                                 </select>
                             </div>
                         </div>
@@ -117,8 +125,8 @@
                         <div class="col-sm-4">
                             <label class="aiz-switch aiz-switch-success mb-0">
                                 <input type="checkbox" onchange="updateSettings(this, 'FORCE_HTTPS')" <?php if (env('FORCE_HTTPS') == 'On') {
-    echo 'checked';
-} ?>>
+                                    echo 'checked';
+                                } ?>>
                                 <span class="slider round"></span>
                             </label>
                         </div>
@@ -139,7 +147,8 @@
                         <label class="col-sm-8 col-from-label">{{ translate('Wallet System Activation') }}</label>
                         <div class="col-sm-4">
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input type="checkbox" onchange="updateSettings(this, 'wallet_system')" @if(get_setting('wallet_system')== 1) checked @endif>
+                                <input type="checkbox" onchange="updateSettings(this, 'wallet_system')"
+                                    @if (get_setting('wallet_system') == 1) checked @endif>
                                 <span class="slider round"></span>
                             </label>
                         </div>
@@ -209,7 +218,8 @@
                         </div>
                         <div class="col-sm-4">
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input type="checkbox" onchange="updateSettings(this, 'profile_picture_approval_by_admin')"
+                                <input type="checkbox"
+                                    onchange="updateSettings(this, 'profile_picture_approval_by_admin')"
                                     <?php if (get_setting('profile_picture_approval_by_admin') == 1) {
                                         echo 'checked';
                                     } ?>>
@@ -217,6 +227,26 @@
                             </label>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-sm-8">
+                            <label class="col-from-label">{{ translate('Member with Premium Plan Can Proceed further.') }}
+                                <i>
+                                    <code>({{ translate('If you enable this, all registered members with free plan will not be able to proceed further with profile , setting and etc.') }})</code>
+                                </i>
+                            </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input type="checkbox"
+                                    onchange="updateSettings(this, 'member_with_premium_plan_can_proceed')"
+                                    <?php if (get_setting('member_with_premium_plan_can_proceed') == 1) {
+                                        echo 'checked';
+                                    } ?>>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

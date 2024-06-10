@@ -203,7 +203,7 @@
                                 class="d-inline-block d-lg-flex pb-1 {{ areActiveRoutes(['parent.addchild'], 'bg-primary-grad') }}">
                                 <a class="nav-link text-uppercase fw-700 fs-15 d-flex align-items-center bg-white py-2"
                                     href="{{ route('parent.addchild') }}">
-                                    <span class="text-primary-grad mb-n1">{{ translate('Add Child') }}</span>
+                                    <span class="text-primary-grad mb-n1">{{ translate('Add Candidate') }}</span>
                                 </a>
                             </li>
                         </ul>

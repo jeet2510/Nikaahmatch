@@ -66,6 +66,10 @@ class ParentController extends Controller
     public function addChild(Request $request)
 
     {
+        $request->merge([
+            'date_of_birth' => '01-01-' . $request->input('date_of_birth')
+        ]);
+
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -73,7 +77,7 @@ class ParentController extends Controller
             'country_code' => 'required|string|max:10',
             'phone' => 'required|string|max:20',
             'gender' => 'required|integer|min:1|max:2',
-            'date_of_birth' => 'required|date',
+            'date_of_birth' => 'required',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'checkbox_example_1' => 'required',
@@ -83,6 +87,7 @@ class ParentController extends Controller
         $validatedData['parent_id'] = Auth::user()->id;
 
         $user = User::create($validatedData);
+        return view('frontend.register_success');
 
         return redirect()->route('login')->with('success', 'User created successfully.');
     }

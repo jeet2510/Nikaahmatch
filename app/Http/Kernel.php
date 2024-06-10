@@ -43,10 +43,10 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\CheckForMaintenanceMode::class
         ],
 
-        'api' => [        
+        'api' => [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,   
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
             // 'throttle:600,1',
             // 'bindings',
         ],
@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'admin' => \App\Http\Middleware\IsAdmin::class,
         'member' => \App\Http\Middleware\IsMember::class,
+        'parent' => \App\Http\Middleware\IsParent::class,
         'api_member' => \App\Http\Middleware\IsApiMember::class,
         'api_email_verified' => \App\Http\Middleware\EmailVerifiedApi::class,
         'auth' => \App\Http\Middleware\Authenticate::class,

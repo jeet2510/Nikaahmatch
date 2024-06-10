@@ -19,10 +19,13 @@ Route::get('/contact-us/page', 'ContactUsController@show_contact_us_page')->name
 Route::post('/contact-us', 'ContactUsController@store')->name('contact-us.store');
 Route::view('/parent/register', 'frontend.parent_registration')->name('parent.register');
 Route::post('/parent/register', 'ParentRegisterController@store')->name('parent.register');
-Route::get('/parent/dashboard', 'HomeController@parentDashboard')->name('parent.dashboard');
-Route::get('/parent/addChild', 'ParentController@addChildPage')->name('parent.addchild');
-Route::post('/parent/addChild', 'ParentController@addChild')->name('parent.addchild');
-Route::get('/loginAschild/{id}', 'ParentController@loginAschild')->name('child.login');
+Route::group(['middleware' => ['parent']], function () {
+
+    Route::get('/parent/dashboard', 'HomeController@parentDashboard')->name('parent.dashboard');
+    Route::get('/parent/addChild', 'ParentController@addChildPage')->name('parent.addchild');
+    Route::post('/parent/addChild', 'ParentController@addChild')->name('parent.addchild');
+    Route::get('/loginAschild/{id}', 'ParentController@loginAschild')->name('child.login');
+});
 Route::get('/loginBackAsParent', 'ParentController@loginBackAsParent')->name('loginBackAsParent');
 
 
@@ -80,7 +83,7 @@ Route::get('/story_details/{id}', 'HomeController@story_details')->name('story_d
 Route::get('/blog', 'BlogController@all_blog')->name('blog');
 Route::get('/blog/{slug}', 'BlogController@blog_details')->name('blog.details');
 
-Route::group(['middleware' => ['member', 'verified']], function () {
+Route::group(['middleware' => ['member']], function () {
 
 
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');

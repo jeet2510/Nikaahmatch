@@ -550,7 +550,7 @@ class MemberController extends Controller
     {
         $member             = User::findOrFail(Auth::user()->id);
         // dd($member->member->current_package_id);
-        if($member->member->current_package_id == 1){
+        if(get_setting('member_with_premium_plan_can_proceed') == 1 && $member->member->current_package_id == 1){
             flash(translate('Please upgrade your plan to process further.'))->error();
             return redirect()->route('packages');
         }
