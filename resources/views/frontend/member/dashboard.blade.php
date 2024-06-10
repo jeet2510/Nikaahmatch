@@ -24,11 +24,11 @@
      }
 
      .alert.alert-info.message_design {
-         background: #e848b9;
+         background: #7073ce;
          color: #fff;
          font-size: large;
          font-weight: 500;
-         border: 1px solid #e848b9;
+         border: 1px solid #22245b;
      }
 
      @keyframes spin {
@@ -316,81 +316,81 @@
              </div>
          </div>
          <!--<div class="col-md-6">
-                                                                                                     <div class="card">
-                                                                                                        <div class="card-header">
-                                                                                                            <h2 class="fs-16 mb-0">{{ translate('Matched profile') }}</h2>
-                                                                                                        </div>
-                                                                                                        <div class="card-body">
-                                                                                                            @if (Auth::user()->member->auto_profile_match == 1)
+                                                                                                             <div class="card">
+                                                                                                                <div class="card-header">
+                                                                                                                    <h2 class="fs-16 mb-0">{{ translate('Matched profile') }}</h2>
+                                                                                                                </div>
+                                                                                                                <div class="card-body">
+                                                                                                                    @if (Auth::user()->member->auto_profile_match == 1)
     <div>
-                                                                                                                @forelse ($similar_profiles->shuffle()->take(5) as $similar_profile)
+                                                                                                                        @forelse ($similar_profiles->shuffle()->take(5) as $similar_profile)
     @if ($similar_profile->user != null)
     <a href="{{ route('member_profile', $similar_profile->match_id) }}" class="text-reset border rounded row no-gutters align-items-center mb-3">
-                                                                                                                        <div class="col-auto w-100px">
-                                                                                                                          @php
-                                                                                                                              $avatar_image =
-                                                                                                                                  $similar_profile
-                                                                                                                                      ->user
-                                                                                                                                      ->member
-                                                                                                                                      ->gender ==
-                                                                                                                                  1
-                                                                                                                                      ? 'assets/img/avatar-place.png'
-                                                                                                                                      : 'assets/img/female-avatar-place.png';
-                                                                                                                              $profile_picture_show = show_profile_picture(
-                                                                                                                                  $similar_profile->user,
-                                                                                                                              );
-                                                                                                                          @endphp
-                                                                                                                          <img
-                                                                                                                              @if ($profile_picture_show) src="{{ uploaded_asset($similar_profile->user->photo) }}"
+                                                                                                                                <div class="col-auto w-100px">
+                                                                                                                                  @php
+                                                                                                                                      $avatar_image =
+                                                                                                                                          $similar_profile
+                                                                                                                                              ->user
+                                                                                                                                              ->member
+                                                                                                                                              ->gender ==
+                                                                                                                                          1
+                                                                                                                                              ? 'assets/img/avatar-place.png'
+                                                                                                                                              : 'assets/img/female-avatar-place.png';
+                                                                                                                                      $profile_picture_show = show_profile_picture(
+                                                                                                                                          $similar_profile->user,
+                                                                                                                                      );
+                                                                                                                                  @endphp
+                                                                                                                                  <img
+                                                                                                                                      @if ($profile_picture_show) src="{{ uploaded_asset($similar_profile->user->photo) }}"
                                       @else
                                       src="{{ static_asset($avatar_image) }}" @endif
-                                                                                                                              onerror="this.onerror=null;this.src='{{ static_asset($avatar_image) }}';"
-                                                                                                                              class="img-fit w-100 size-100px"
-                                                                                                                          >
-                                                                                                                        </div>
-                                                                                                                        <div class="col">
-                                                                                                                          <div class="p-3">
-                                                                                                                              <h5 class="fs-16 text-body text-truncate">{{ $similar_profile->user->first_name . ' ' . $similar_profile->user->last_name }}</h5>
-                                                                                                                              <div class="fs-12 text-truncate-3">
-                                                                                                                                  <span class="mr-1 d-inline-block">
-                                                                                                                                    @if (!empty($similar_profile->user->member->birthday))
+                                                                                                                                      onerror="this.onerror=null;this.src='{{ static_asset($avatar_image) }}';"
+                                                                                                                                      class="img-fit w-100 size-100px"
+                                                                                                                                  >
+                                                                                                                                </div>
+                                                                                                                                <div class="col">
+                                                                                                                                  <div class="p-3">
+                                                                                                                                      <h5 class="fs-16 text-body text-truncate">{{ $similar_profile->user->first_name . ' ' . $similar_profile->user->last_name }}</h5>
+                                                                                                                                      <div class="fs-12 text-truncate-3">
+                                                                                                                                          <span class="mr-1 d-inline-block">
+                                                                                                                                            @if (!empty($similar_profile->user->member->birthday))
     {{ \Carbon\Carbon::parse($similar_profile->user->member->birthday)->age }} {{ translate('yrs') }},
     @endif
-                                                                                                                                  </span>
-                                                                                                                                  <span class="mr-1 d-inline-block">
-                                                                                                                                    @if (!empty($similar_profile->user->physical_attributes->height))
+                                                                                                                                          </span>
+                                                                                                                                          <span class="mr-1 d-inline-block">
+                                                                                                                                            @if (!empty($similar_profile->user->physical_attributes->height))
     {{ $similar_profile->user->physical_attributes->height }} {{ translate('Feet') }},
     @endif
-                                                                                                                                  </span>
-                                                                                                                                  <span class="mr-1 d-inline-block">
-                                                                                                                                    @if (!empty($similar_profile->user->member->marital_status->name))
+                                                                                                                                          </span>
+                                                                                                                                          <span class="mr-1 d-inline-block">
+                                                                                                                                            @if (!empty($similar_profile->user->member->marital_status->name))
     {{ $similar_profile->user->member->marital_status->name }},
     @endif
-                                                                                                                                  </span>
-                                                                                                                                  <span class="mr-1 d-inline-block">
-                                                                                                                                    {{ !empty($similar_profile->user->spiritual_backgrounds->religion->name) ? $similar_profile->user->spiritual_backgrounds->religion->name . ', ' : '' }}
-                                                                                                                                  </span>
-                                                                                                                                  <span class="mr-1 d-inline-block">
-                                                                                                                                    {{ !empty($similar_profile->user->spiritual_backgrounds->caste->name) ? $similar_profile->user->spiritual_backgrounds->caste->name . ', ' : '' }}
-                                                                                                                                  </span>
-                                                                                                                                  <span class="mr-1 d-inline-block">
-                                                                                                                                    <td class="py-1">{{ !empty($similar_profile->user->spiritual_backgrounds->sub_caste->name) ? $similar_profile->user->spiritual_backgrounds->sub_caste->name : '' }}</td>
-                                                                                                                                  </span>
-                                                                                                                              </div>
-                                                                                                                          </div>
-                                                                                                                        </div>
-                                                                                                                    </a>
+                                                                                                                                          </span>
+                                                                                                                                          <span class="mr-1 d-inline-block">
+                                                                                                                                            {{ !empty($similar_profile->user->spiritual_backgrounds->religion->name) ? $similar_profile->user->spiritual_backgrounds->religion->name . ', ' : '' }}
+                                                                                                                                          </span>
+                                                                                                                                          <span class="mr-1 d-inline-block">
+                                                                                                                                            {{ !empty($similar_profile->user->spiritual_backgrounds->caste->name) ? $similar_profile->user->spiritual_backgrounds->caste->name . ', ' : '' }}
+                                                                                                                                          </span>
+                                                                                                                                          <span class="mr-1 d-inline-block">
+                                                                                                                                            <td class="py-1">{{ !empty($similar_profile->user->spiritual_backgrounds->sub_caste->name) ? $similar_profile->user->spiritual_backgrounds->sub_caste->name : '' }}</td>
+                                                                                                                                          </span>
+                                                                                                                                      </div>
+                                                                                                                                  </div>
+                                                                                                                                </div>
+                                                                                                                            </a>
     @endif
                         @empty
-                                                                                                                    <div class="alert alert-info">{{ translate('Update your partner expectation for auto match making') }}</div>
+                                                                                                                            <div class="alert alert-info">{{ translate('Update your partner expectation for auto match making') }}</div>
     @endforelse
-                                                                                                            </div>
+                                                                                                                    </div>
 @else
     <div class="alert alert-info">{{ translate('Upgrade your package for auto match making') }}</div>
     @endif
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div> -->
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div> -->
          <div class="col-md-6">
              <div class="card">
                  <div class="card-header">

@@ -14,6 +14,12 @@
         color: red;
     }
 </style>
+<style>
+    .filled {
+        /* background-color: green !important; */
+        color: green !important;
+    }
+</style>
 @section('panel_content')
     <form action="{{ route('member.saveMemberAllInfo', $member->member->id) }}" method="POST" id="saveCandidateInfo">
         @csrf
@@ -85,7 +91,6 @@
                         @enderror
                     </div>
                 </div>
-
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label for="first_name">{{ translate('Gender') }}
@@ -102,7 +107,7 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="first_name">{{ translate('Date Of Birth') }}
+                        <label for="first_name">{{ translate('Year Of Birth') }}
                             <span class="text-danger">*</span>
                         </label>
                         @php
@@ -265,7 +270,7 @@
                     <a onclick="education_add_modal('{{ $member->id }}');" href="javascript:void(0);"
                         class="btn btn-sm btn-primary ">
                         <i class="las mr-1 la-plus"></i>
-                        {{ translate('Add New') }}
+                        {{ translate('Add') }}
                     </a>
                 </div>
             </div>
@@ -323,7 +328,7 @@
                     <a onclick="career_add_modal('{{ $member->id }}');" href="javascript:void(0);"
                         class="btn btn-sm btn-primary ">
                         <i class="las mr-1 la-plus"></i>
-                        {{ translate('Add New') }}
+                        {{ translate('Add') }}
                     </a>
                 </div>
             </div>
@@ -481,7 +486,7 @@
         $permanent_address2 = $permanent_address->address2 ?? '';
     @endphp
     <!--@if (get_setting('member_permanent_address_section') == 'on')
-                                                                                                                                                    -->
+                                                                                                                                                                                                                    -->
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0 h6">{{ translate('Permanent Address') }}</h5>
@@ -558,16 +563,16 @@
                     @enderror
                 </div>
             </div>
-        </div>
-        <div class="text-right">
-            <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary btn-sm">{{ translate('Update') }}</button>
+            </div>
         </div>
 
 
     </div>
     </form>
     <!--
-                                                                                                                                                    @endif-->
+                                                                                                                                                                                                                    @endif-->
 
 
 
@@ -712,75 +717,75 @@
     @endif
 
     <!-- Residency Information
-                                                                                                                                                        @if (get_setting('member_residency_information_section') == 'on')
-                                                                                                                                                            <div class="card">
-                                                                                                                                                                <div class="card-header">
-                                                                                                                                                                    <h5 class="mb-0 h6">{{ translate('Residency Information') }}</h5>
-                                                                                                                                                                </div>
-                                                                                                                                                                <div class="card-body">
-                                                                                                                                                                    @php
-                                                                                                                                                                        $birth_country_id =
-                                                                                                                                                                            $member
-                                                                                                                                                                                ->recidency
-                                                                                                                                                                                ->birth_country_id ??
-                                                                                                                                                                            '';
-                                                                                                                                                                        $recidency_country_id =
-                                                                                                                                                                            $member
-                                                                                                                                                                                ->recidency
-                                                                                                                                                                                ->recidency_country_id ??
-                                                                                                                                                                            '';
-                                                                                                                                                                        $growup_country_id =
-                                                                                                                                                                            $member
-                                                                                                                                                                                ->recidency
-                                                                                                                                                                                ->growup_country_id ??
-                                                                                                                                                                            '';
-                                                                                                                                                                    @endphp
-                                                                                                                                                                    <div class="form-group row">
-                                                                                                                                                                        <div class="col-md-6">
-                                                                                                                                                                            <label for="birth_country_id">{{ translate('Birth Country') }}</label>
-                                                                                                                                                                            <select class="form-control aiz-selectpicker" name="birth_country_id"
-                                                                                                                                                                                data-selected="{{ $birth_country_id }}" data-live-search="true">
-                                                                                                                                                                                @foreach ($countries as $country)
+                                                                                                                                                                                                                        @if (get_setting('member_residency_information_section') == 'on')
+                                                                                                                                                                                                                            <div class="card">
+                                                                                                                                                                                                                                <div class="card-header">
+                                                                                                                                                                                                                                    <h5 class="mb-0 h6">{{ translate('Residency Information') }}</h5>
+                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                <div class="card-body">
+                                                                                                                                                                                                                                    @php
+                                                                                                                                                                                                                                        $birth_country_id =
+                                                                                                                                                                                                                                            $member
+                                                                                                                                                                                                                                                ->recidency
+                                                                                                                                                                                                                                                ->birth_country_id ??
+                                                                                                                                                                                                                                            '';
+                                                                                                                                                                                                                                        $recidency_country_id =
+                                                                                                                                                                                                                                            $member
+                                                                                                                                                                                                                                                ->recidency
+                                                                                                                                                                                                                                                ->recidency_country_id ??
+                                                                                                                                                                                                                                            '';
+                                                                                                                                                                                                                                        $growup_country_id =
+                                                                                                                                                                                                                                            $member
+                                                                                                                                                                                                                                                ->recidency
+                                                                                                                                                                                                                                                ->growup_country_id ??
+                                                                                                                                                                                                                                            '';
+                                                                                                                                                                                                                                    @endphp
+                                                                                                                                                                                                                                    <div class="form-group row">
+                                                                                                                                                                                                                                        <div class="col-md-6">
+                                                                                                                                                                                                                                            <label for="birth_country_id">{{ translate('Birth Country') }}</label>
+                                                                                                                                                                                                                                            <select class="form-control aiz-selectpicker" name="birth_country_id"
+                                                                                                                                                                                                                                                data-selected="{{ $birth_country_id }}" data-live-search="true">
+                                                                                                                                                                                                                                                @foreach ($countries as $country)
     <option value="{{ $country->id }}">{{ $country->name }}</option>
     @endforeach
-                                                                                                                                                                            </select>
-                                                                                                                                                                        </div>
-                                                                                                                                                                        <div class="col-md-6">
-                                                                                                                                                                            <label for="recidency_country_id">{{ translate('Residency Country') }}</label>
-                                                                                                                                                                            <select class="form-control aiz-selectpicker" name="recidency_country_id"
-                                                                                                                                                                                data-selected="{{ $recidency_country_id }}" data-live-search="true">
-                                                                                                                                                                                @foreach ($countries as $country)
+                                                                                                                                                                                                                                            </select>
+                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                        <div class="col-md-6">
+                                                                                                                                                                                                                                            <label for="recidency_country_id">{{ translate('Residency Country') }}</label>
+                                                                                                                                                                                                                                            <select class="form-control aiz-selectpicker" name="recidency_country_id"
+                                                                                                                                                                                                                                                data-selected="{{ $recidency_country_id }}" data-live-search="true">
+                                                                                                                                                                                                                                                @foreach ($countries as $country)
     <option value="{{ $country->id }}">{{ $country->name }}</option>
     @endforeach
-                                                                                                                                                                            </select>
-                                                                                                                                                                        </div>
-                                                                                                                                                                    </div>
-                                                                                                                                                                    <div class="form-group row">
-                                                                                                                                                                        <div class="col-md-6">
-                                                                                                                                                                            <label for="growup_country_id">{{ translate('Grow up Country') }}</label>
-                                                                                                                                                                            <select class="form-control aiz-selectpicker" name="growup_country_id"
-                                                                                                                                                                                data-selected="{{ $growup_country_id }}" data-live-search="true">
-                                                                                                                                                                                @foreach ($countries as $country)
+                                                                                                                                                                                                                                            </select>
+                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                    <div class="form-group row">
+                                                                                                                                                                                                                                        <div class="col-md-6">
+                                                                                                                                                                                                                                            <label for="growup_country_id">{{ translate('Grow up Country') }}</label>
+                                                                                                                                                                                                                                            <select class="form-control aiz-selectpicker" name="growup_country_id"
+                                                                                                                                                                                                                                                data-selected="{{ $growup_country_id }}" data-live-search="true">
+                                                                                                                                                                                                                                                @foreach ($countries as $country)
     <option value="{{ $country->id }}">{{ $country->name }}</option>
     @endforeach
-                                                                                                                                                                            </select>
-                                                                                                                                                                        </div>
-                                                                                                                                                                        <div class="col-md-6">
-                                                                                                                                                                            <label for="immigration_status">{{ translate('Immigration Status') }}</label>
-                                                                                                                                                                            <input type="text" name="immigration_status"
-                                                                                                                                                                                value="{{ $member->recidency->immigration_status ?? '' }}"
-                                                                                                                                                                                placeholder="{{ translate('Immigration Status') }}" class="form-control">
-                                                                                                                                                                            @error('immigration_status')
+                                                                                                                                                                                                                                            </select>
+                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                        <div class="col-md-6">
+                                                                                                                                                                                                                                            <label for="immigration_status">{{ translate('Immigration Status') }}</label>
+                                                                                                                                                                                                                                            <input type="text" name="immigration_status"
+                                                                                                                                                                                                                                                value="{{ $member->recidency->immigration_status ?? '' }}"
+                                                                                                                                                                                                                                                placeholder="{{ translate('Immigration Status') }}" class="form-control">
+                                                                                                                                                                                                                                            @error('immigration_status')
         <small class="form-text text-danger">{{ $message }}</small>
     @enderror
-                                                                                                                                                                        </div>
-                                                                                                                                                                    </div>
-                                                                                                                                                                </div>
-                                                                                                                                                            </div>
-                                                                                                                                                        @endif
+                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                        @endif
 
 
-                                                                                                                                                       Spiritual & Social Background -->
+                                                                                                                                                                                                                       Spiritual & Social Background -->
     @php
         $member_religion_id = $member->spiritual_backgrounds->religion_id ?? '';
         $member_caste_id = $member->spiritual_backgrounds->caste_id ?? '';
@@ -960,29 +965,29 @@
                         </div>
                     </div>
                     <!--
-                                                                                                                                                                    <div class="form-group row">
-                                                                                                                                                                        @php
-                                                                                                                                                                        @endphp
-                                                                                                                                                                        <div class="col-md-6 mt-2">
-                                                                                                                                                                            <label for="guardian_name">{{ translate('Guardian name') }}</label>
-                                                                                                                                                                            <input type="text" name="guardian_name"
-                                                                                                                                                                                value="{{ $member->families->guardian_name ?? '' }}"
-                                                                                                                                                                                placeholder="{{ translate('Guardian Name') }}" class="form-control" required>
-                                                                                                                                                                            @error('guardian_name')
+                                                                                                                                                                                                                                    <div class="form-group row">
+                                                                                                                                                                                                                                        @php
+                                                                                                                                                                                                                                        @endphp
+                                                                                                                                                                                                                                        <div class="col-md-6 mt-2">
+                                                                                                                                                                                                                                            <label for="guardian_name">{{ translate('Guardian name') }}</label>
+                                                                                                                                                                                                                                            <input type="text" name="guardian_name"
+                                                                                                                                                                                                                                                value="{{ $member->families->guardian_name ?? '' }}"
+                                                                                                                                                                                                                                                placeholder="{{ translate('Guardian Name') }}" class="form-control" required>
+                                                                                                                                                                                                                                            @error('guardian_name')
         <small class="form-text text-danger">{{ $message }}</small>
     @enderror
-                                                                                                                                                                        </div>
-                                                                                                                                                                        <div class="col-md-6 mt-2">
-                                                                                                                                                                            <label for="guardian_phone">{{ translate('Guardian Phone Number') }}</label>
-                                                                                                                                                                            <input type="text" name="guardian_phone"
-                                                                                                                                                                                value="{{ $member->families->guardian_phone ?? '' }}"
-                                                                                                                                                                                placeholder="{{ translate('Guardian Phone Number') }}" class="form-control" required>
-                                                                                                                                                                            @error('guardian_phone')
+                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                        <div class="col-md-6 mt-2">
+                                                                                                                                                                                                                                            <label for="guardian_phone">{{ translate('Guardian Phone Number') }}</label>
+                                                                                                                                                                                                                                            <input type="text" name="guardian_phone"
+                                                                                                                                                                                                                                                value="{{ $member->families->guardian_phone ?? '' }}"
+                                                                                                                                                                                                                                                placeholder="{{ translate('Guardian Phone Number') }}" class="form-control" required>
+                                                                                                                                                                                                                                            @error('guardian_phone')
         <small class="form-text text-danger">{{ $message }}</small>
     @enderror
-                                                                                                                                                                        </div>
-                                                                                                                                                                    </div>
-                                                                                                                                                     -->
+                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                     -->
                     @php
                         $index = '0';
                         $siblings = !empty($member->families->sibling) ? json_decode($member->families->sibling) : [];
@@ -1045,7 +1050,7 @@
                                 <div class="col-md-6">
                                     <label for="sibling_m_s">{{ translate('Sibling Marital Status') }}</label>
                                     <select class="form-control aiz-selectpicker" name="sibling_m_s[]"
-                                        data-live-search="true" required multiple>
+                                        data-live-search="true" required>
                                         @foreach ($marital_statuses as $marital_status)
                                             <option value="{{ $marital_status->id }}"
                                                 {{ isset($maritalStatuses[$index]) && $maritalStatuses[$index] == $marital_status->id ? 'selected' : '' }}>
@@ -1596,7 +1601,7 @@
 
                     <div class="col-md-6">
                         <label for="sibling_m_s${siblingCount}">{{ translate('Sibling Marital Status') }}</label>
-                        <select class="form-control aiz-selectpicker" name="sibling_m_s[]" data-live-search="true" required multiple>
+                        <select class="form-control aiz-selectpicker" name="sibling_m_s[]" data-live-search="true" required>
                             @foreach ($marital_statuses as $marital_status)
                                 <option value="{{ $marital_status->id }}">
                                     {{ $marital_status->name }}
@@ -1965,6 +1970,46 @@
                 submitHandler: function(form) {
                     form.submit();
                 }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to check if a field is filled
+            function isFilled(field) {
+                return field && field.value.trim() !== '';
+            }
+
+            // Function to check all required fields and update card headers
+            function checkAllFields() {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => {
+                    const requiredFields = card.querySelectorAll('[required]');
+                    console.log(requiredFields);
+                    debugger;
+                    let allFilled = true;
+                    requiredFields.forEach(field => {
+                        if (field.id !== 'member_caste_id' && !isFilled(field)) {
+                            allFilled = false;
+                        }
+                    });
+                    const cardHeader = card.querySelector('.card-header');
+                    if (allFilled) {
+                        cardHeader.classList.add('filled');
+                    } else {
+                        cardHeader.classList.remove('filled');
+                    }
+                });
+            }
+
+            // Initial check
+            checkAllFields();
+
+            // Add event listeners to all required fields
+            const requiredFields = document.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                field.addEventListener('input', checkAllFields);
+                field.addEventListener('change', checkAllFields);
             });
         });
     </script>

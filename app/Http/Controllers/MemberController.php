@@ -975,7 +975,8 @@ $validator  = Validator::make($request->all(), $rules);
 			}
 
             flash(translate('Family Info has been updated successfully'))->success();
-            return back();
+            // return back();
+            return redirect()->route('dashboard');
 			}
 			else
 			{
